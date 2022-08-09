@@ -1,6 +1,6 @@
 # EZ2DB
 
-- EZ2ON 서열표 API Server
+- EZ2ON 서열표 API Server (2022.08.07)
 
 ## Stack
 ![img_java](https://img.shields.io/badge/java&nbsp;11-007396?style=for-the-badge&logo=java&logoColor=white)
