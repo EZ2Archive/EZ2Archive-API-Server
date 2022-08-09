@@ -30,6 +30,7 @@ jobs:
         port: ${{ secrets.port }}
         username: ${{ secrets.username }}
         key: ${{ secrets.sshkey }}
+        java-version: 11
         script: |
           cd ${{ secrets.path }}
           git pull https://${{ secrets.githubRepoToken }}@github.com/{orgname}/{repo}.git master
