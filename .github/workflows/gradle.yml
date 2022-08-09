@@ -35,4 +35,4 @@ jobs:
             git pull https://${{ secrets.githubrepotoken }}@github.com/EZ2DB/EZ2DB.git master
             chmod +x gradlew
             ./gradlew build
-            java -jar ./build/libs/*.jar
+            java -jar ./build/libs/*SNAPSHOT.jar
