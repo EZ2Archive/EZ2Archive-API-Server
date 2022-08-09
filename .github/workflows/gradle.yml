@@ -50,12 +50,12 @@ jobs:
           target: ${{ secrets.PATH }}
 
       - name: Executing remote ssh commands using SSH Private Key
-          uses: appleboy/ssh-action@master
-          with:
-            host: ${{ secrets.host }}
-            port: ${{ secrets.port }}
-            username: ${{ secrets.username }}
-            key: ${{ secrets.sshkey }}
-            script: |
-              cd ${{ secrets.path }}
-              java -jar *.jar
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.host }}
+          port: ${{ secrets.port }}
+          username: ${{ secrets.username }}
+          key: ${{ secrets.sshkey }}
+          script: |
+            cd ${{ secrets.path }}
+            java -jar *.jar
