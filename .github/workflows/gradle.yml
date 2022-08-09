@@ -30,6 +30,10 @@ jobs:
         port: ${{ secrets.port }}
         username: ${{ secrets.username }}
         key: ${{ secrets.sshkey }}
+        script: |
+          cd ${{ secrets.path }}
+          git pull https://${{ secrets.githubRepoToken }}@github.com/{orgname}/{repo}.git master
+          java -jar ./build/EZ2DB-0.0.1-SNAPSHOT.jar
     - name: Build with Gradle
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
