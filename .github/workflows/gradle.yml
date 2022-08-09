@@ -26,13 +26,13 @@ jobs:
       - name: Executing remote ssh commands using SSH Private Key
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST }}
-          port: ${{ secrets.PORT }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
+          host: ${{ secrets.host }}
+          port: ${{ secrets.port }}
+          username: ${{ secrets.username }}
+          key: ${{ secrets.sshkey }}
           script: |
             cd ${{ secrets.PATH }}
-            git pull https://${{ secrets.TOKEN }}@github.com/EZ2DB/EZ2DB.git master
+            git pull https://${{ secrets.githubrepotoken }}@github.com/EZ2DB/EZ2DB.git master
             chmod +x gradlew
             ./gradlew build
             java -jar ./build/libs/*.jar
