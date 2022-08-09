@@ -49,13 +49,13 @@ jobs:
           source: "./build/libs/*.jar"
           target: ${{ secrets.PATH }}
 
-      - name: Executing remote ssh commands using SSH Private Key
-        uses: appleboy/ssh-action@master
+      - name: Execute SSH commmands on remote server
+        uses: fifsky/ssh-action@master
         with:
-          host: ${{ secrets.host }}
-          port: ${{ secrets.port }}
-          username: ${{ secrets.username }}
-          key: ${{ secrets.sshkey }}
-          script: |
-            cd ${{ secrets.path }}
-            java -jar *.jar
+          command: |
+            cd ${{ secrets.PATH }}
+            java -jar ./*.jar
+          host: ${{ secrets.HOST }}
+          port: ${{ secrets.PORT }}
+          user: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
