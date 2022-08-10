@@ -9,11 +9,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AchievementService
 {
-  private final ArchiveRepository archiveRepository;
+  private final AchieveRepository aachieveRepository;
 
   public List<AchieveVO> findAchievementList(String userId, KeyType keyType, int level)
   {
-    return archiveRepository.findByUserIdWithKeyTypeWithLevel(userId, keyType, level);
+    return aachieveRepository.findByUserIdWithKeyTypeWithLevel(userId, keyType, level);
   }
 
 }

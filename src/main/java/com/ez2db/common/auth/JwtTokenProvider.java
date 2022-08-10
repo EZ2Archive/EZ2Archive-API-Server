@@ -1,7 +1,6 @@
 package com.ez2db.common.auth;
 
 import com.ez2db.common.exception.auth.AuthenticationException;
-import com.ez2db.common.exception.auth.AuthorizationException;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 

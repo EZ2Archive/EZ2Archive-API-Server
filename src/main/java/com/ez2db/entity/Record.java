@@ -1,12 +1,17 @@
 package com.ez2db.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 기록 엔티티 클래스
  */
 @Entity
+@Getter @Setter
 public class Record
 {
   /** 기록 아이디 */
@@ -38,87 +43,7 @@ public class Record
   @Enumerated(EnumType.STRING)
   private Grade grade;
 
-  /** 기록 생성 시각 */
-  @Column(nullable = false)
-  private LocalDateTime addTime;
+  @OneToMany(mappedBy = "record")
+  private List<RecordHistory> recordHistoryList = new ArrayList<>();
 
-  public Long getId()
-  {
-    return id;
-  }
-
-  public void setId(Long id)
-  {
-    this.id = id;
-  }
-
-  public MusicInfo getMusic()
-  {
-    return music;
-  }
-
-  public void setMusic(MusicInfo music)
-  {
-    this.music = music;
-  }
-
-  public Member getMember()
-  {
-    return member;
-  }
-
-  public void setMember(Member member)
-  {
-    this.member = member;
-  }
-
-  public boolean isNoMiss()
-  {
-    return isNoMiss;
-  }
-
-  public void setNoMiss(boolean noMiss)
-  {
-    isNoMiss = noMiss;
-  }
-
-  public boolean isAllCool()
-  {
-    return isAllCool;
-  }
-
-  public void setAllCool(boolean allCool)
-  {
-    isAllCool = allCool;
-  }
-
-  public int getScore()
-  {
-    return score;
-  }
-
-  public void setScore(int score)
-  {
-    this.score = score;
-  }
-
-  public Grade getGrade()
-  {
-    return grade;
-  }
-
-  public void setGrade(Grade grade)
-  {
-    this.grade = grade;
-  }
-
-  public LocalDateTime getAddTime()
-  {
-    return addTime;
-  }
-
-  public void setAddTime(LocalDateTime addTime)
-  {
-    this.addTime = addTime;
-  }
 }

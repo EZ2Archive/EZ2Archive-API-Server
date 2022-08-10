@@ -1,93 +1,52 @@
 package com.ez2db.entity;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.math.BigInteger;
+
+@SuppressWarnings("unused")
+@Getter @Setter
 public class AchieveVO
 {
   private Long recordId;
+
+  private Long musicInfoId;
 
   private String name;
 
   private int score;
 
-  private int level;
-
   private int rank;
 
-  @Enumerated(EnumType.STRING)
-  private Grade grade;
+  private String grade;
 
-  private File imageFile;
+  private boolean isAllCool;
 
-  public AchieveVO(Long recordId, String name, int score, int level, int rank, Grade grade, File imageFile)
+  private boolean isNoMiss;
+
+  private String imagePath;
+
+  public AchieveVO(){}
+
+  public AchieveVO(Long recordId, Long musicInfoId, String name, int score, int rank, String grade, boolean isAllCool, boolean isNoMiss, String imagePath)
   {
     this.recordId = recordId;
+    this.musicInfoId = musicInfoId;
     this.name = name;
     this.score = score;
-    this.level = level;
     this.rank = rank;
     this.grade = grade;
-    this.imageFile = imageFile;
+    this.isAllCool = isAllCool;
+    this.isNoMiss = isNoMiss;
+    this.imagePath = imagePath;
   }
 
-  public String getName()
+  /**
+   * QLRM 전용 생성자
+   */
+  public AchieveVO(BigInteger recordId, BigInteger musicInfoId, String name, int score, int rank, String grade, boolean isAllCool, boolean isNoMiss, String imagePath)
   {
-    return name;
-  }
-
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-
-  public int getScore()
-  {
-    return score;
-  }
-
-  public void setScore(int score)
-  {
-    this.score = score;
-  }
-
-  public int getLevel()
-  {
-    return level;
-  }
-
-  public void setLevel(int level)
-  {
-    this.level = level;
-  }
-
-  public int getRank()
-  {
-    return rank;
-  }
-
-  public void setRank(int rank)
-  {
-    this.rank = rank;
-  }
-
-  public Grade getGrade()
-  {
-    return grade;
-  }
-
-  public void setGrade(Grade grade)
-  {
-    this.grade = grade;
-  }
-
-  public File getImageFile()
-  {
-    return imageFile;
-  }
-
-  public void setImageFile(File imageFile)
-  {
-    this.imageFile = imageFile;
+    this(recordId.longValue(), musicInfoId.longValue(), name, score, rank, grade, isAllCool, isNoMiss, imagePath);
   }
 }

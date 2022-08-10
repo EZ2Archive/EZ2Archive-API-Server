@@ -1,12 +1,18 @@
 package com.ez2db.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 음원 정보 엔티티 클래스
  */
 @Entity
+@Getter @Setter
 public class MusicInfo
 {
   /** 음원 고유 아이디 */
@@ -51,6 +57,9 @@ public class MusicInfo
   /** 음원 가용 최고 점수 */
   private int bestScore;
 
+  @OneToMany(mappedBy = "music")
+  private List<Record> recordList = new ArrayList<>();
+  
   /** 음원 추가 시각 */
   @Column(nullable = false)
   private LocalDateTime addTime;
@@ -59,123 +68,4 @@ public class MusicInfo
   @Lob
   private String description;
 
-  public Long getId()
-  {
-    return id;
-  }
-
-  public void setId(Long id)
-  {
-    this.id = id;
-  }
-
-  public String getName()
-  {
-    return name;
-  }
-
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-
-  public String getArtist()
-  {
-    return artist;
-  }
-
-  public void setArtist(String artist)
-  {
-    this.artist = artist;
-  }
-
-  public File getImageFile()
-  {
-    return imageFile;
-  }
-
-  public void setImageFile(File imageFile)
-  {
-    this.imageFile = imageFile;
-  }
-
-  public KeyType getKeyType()
-  {
-    return keyType;
-  }
-
-  public void setKeyType(KeyType keyType)
-  {
-    this.keyType = keyType;
-  }
-
-  public MusicDifficulty getDifficulty()
-  {
-    return difficulty;
-  }
-
-  public void setDifficulty(MusicDifficulty difficulty)
-  {
-    this.difficulty = difficulty;
-  }
-
-  public MusicCategory getCategory()
-  {
-    return category;
-  }
-
-  public void setCategory(MusicCategory category)
-  {
-    this.category = category;
-  }
-
-  public int getLevel()
-  {
-    return level;
-  }
-
-  public void setLevel(int level)
-  {
-    this.level = level;
-  }
-
-  public int getRank()
-  {
-    return rank;
-  }
-
-  public void setRank(int rank)
-  {
-    this.rank = rank;
-  }
-
-  public int getBestScore()
-  {
-    return bestScore;
-  }
-
-  public void setBestScore(int bestScore)
-  {
-    this.bestScore = bestScore;
-  }
-
-  public LocalDateTime getAddTime()
-  {
-    return addTime;
-  }
-
-  public void setAddTime(LocalDateTime addTime)
-  {
-    this.addTime = addTime;
-  }
-
-  public String getDescription()
-  {
-    return description;
-  }
-
-  public void setDescription(String description)
-  {
-    this.description = description;
-  }
 }

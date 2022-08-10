@@ -1,14 +1,19 @@
 package com.ez2db.entity;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 사용자 엔티티 클래스
  */
 @Entity
+@Getter @Setter
 public class Member
 {
   /** 사용자 고유 번호 */
@@ -40,82 +45,12 @@ public class Member
   @ApiModelProperty(hidden = true)
   private MemberAuthority authority;
 
+  @OneToMany(mappedBy = "member")
+  private List<Record> recordList = new ArrayList<>();
+
   /** 사용자 생성 시각 */
   @Column(nullable = false)
   @ApiModelProperty(hidden = true)
   private LocalDateTime addTime;
 
-  public Member()
-  {
-  }
-
-  public Long getId()
-  {
-    return id;
-  }
-
-  public void setId(Long id)
-  {
-    this.id = id;
-  }
-
-  public String getUserId()
-  {
-    return userId;
-  }
-
-  public void setUserId(String userId)
-  {
-    this.userId = userId;
-  }
-
-  public String getPassword()
-  {
-    return password;
-  }
-
-  public void setPassword(String password)
-  {
-    this.password = password;
-  }
-
-  public Long getSalt()
-  {
-    return salt;
-  }
-
-  public void setSalt(Long salt)
-  {
-    this.salt = salt;
-  }
-
-  public String getName()
-  {
-    return name;
-  }
-
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-
-  public MemberAuthority getAuthority()
-  {
-    return authority;
-  }
-
-  public void setAuthority(MemberAuthority authority)
-  {
-    this.authority = authority;
-  }
-
-  public LocalDateTime getAddTime()
-  {
-    return addTime;
-  }
-
-  public void setAddTime(LocalDateTime addTime)
-  {
-    this.addTime = addTime;
-  }
 }
