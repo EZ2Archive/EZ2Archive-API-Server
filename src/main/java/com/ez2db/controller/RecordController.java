@@ -5,7 +5,7 @@ import com.ez2db.common.auth.RequiredToken;
 import com.ez2db.common.auth.TokenProvider;
 import com.ez2db.common.response.CommonResponse;
 import com.ez2db.entity.Record;
-import com.ez2db.entity.service.RecordService;
+import com.ez2db.service.RecordService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
