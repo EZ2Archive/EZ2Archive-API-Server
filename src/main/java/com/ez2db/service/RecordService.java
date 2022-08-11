@@ -6,9 +6,9 @@ import com.ez2db.common.validator.Validator;
 import com.ez2db.entity.Member;
 import com.ez2db.entity.MusicInfo;
 import com.ez2db.entity.Record;
-import com.ez2db.entity.RecordRepository;
 import com.ez2db.repository.MemberRepository;
 import com.ez2db.repository.MusicInfoRepository;
+import com.ez2db.repository.RecordRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

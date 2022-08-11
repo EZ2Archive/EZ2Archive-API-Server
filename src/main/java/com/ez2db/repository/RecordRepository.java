@@ -1,5 +1,6 @@
-package com.ez2db.entity;
+package com.ez2db.repository;
 
+import com.ez2db.entity.Record;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

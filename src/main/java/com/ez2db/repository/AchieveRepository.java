@@ -1,5 +1,7 @@
-package com.ez2db.entity;
+package com.ez2db.repository;
 
+import com.ez2db.entity.AchieveVO;
+import com.ez2db.entity.KeyType;
 import lombok.RequiredArgsConstructor;
 import org.qlrm.mapper.JpaResultMapper;
 import org.springframework.stereotype.Repository;
