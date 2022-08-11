@@ -4,6 +4,7 @@
 
 ## Stack
 ![img_java](https://img.shields.io/badge/java&nbsp;11-007396?style=for-the-badge&logo=java&logoColor=white)
+![img_c#](https://img.shields.io/badge/C&#65283;-612473?style=for-the-badge&logo=csharp&logoColor=white)
 ![img_javaScript](https://img.shields.io/badge/javascript-f7df1e?style=for-the-badge&logo=javascript&logoColor=black)
 ![img_vue](https://img.shields.io/badge/vue.js-4FC08DF?style=for-the-badge&logo=vue.js&logoColor=white)
 ![img_vuetify](https://img.shields.io/badge/vuetify-1867C0?style=for-the-badge&logo=vuetify&logoColor=white)
