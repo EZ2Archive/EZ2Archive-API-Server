@@ -1,4 +1,4 @@
-package com.ez2db.entity.service;
+package com.ez2db.service;
 
 import com.ez2db.common.exception.business.IllegalValueException;
 import com.ez2db.common.exception.business.ResourceNotFoundException;
