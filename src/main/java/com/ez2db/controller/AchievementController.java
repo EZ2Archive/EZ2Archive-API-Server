@@ -1,7 +1,7 @@
 package com.ez2db.controller;
 
+import com.ez2db.common.aspect.RequiredToken;
 import com.ez2db.common.auth.JwtToken;
-import com.ez2db.common.auth.RequiredToken;
 import com.ez2db.common.auth.TokenProvider;
 import com.ez2db.common.response.CommonResponse;
 import com.ez2db.entity.AchieveVO;
