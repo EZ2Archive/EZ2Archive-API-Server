@@ -29,16 +29,19 @@ public class AuthenticationController
   public ResponseEntity<CommonResponse<JwtToken>> loginPost(@ApiIgnore HttpServletRequest request, @RequestParam String userId, @RequestParam String password)
   {
     JwtToken token;
+
     try
     {
       token = tokenProvider.getToken(request);
 
       tokenProvider.isValid(token);
+
+      if( !userId.equals(tokenProvider.getIdFromToken(token)) ) throw new AuthenticationException("토큰의 사용자 아이디가 일치하지 않습니다.");
     }
     catch( AuthenticationException | JwtException e )
     {
       // 헤더에 토큰이 존재하지 않거나 토큰이 유효하지 않은 경우 로그인 시도
-      token = loginService.login(userId, password);
+      token = loginService.login(request, userId, password);
     }
 
     return ResponseEntity.ok().body(
