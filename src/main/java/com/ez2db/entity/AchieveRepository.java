@@ -45,12 +45,12 @@ public class AchieveRepository
 //      .setParameter("keyType", keyType)
 //      .setParameter("level", level)
 //      .getResultList();
-
-    String query = "SELECT NVL(r.RECORD_ID, -1) " +
+    final String query = "SELECT NVL(r.RECORD_ID, -1) " +
       " ,      mi.MUSIC_INFO_ID" +
       " ,      mi.NAME" +
       " ,      NVL(r.SCORE, -1)" +
       " ,      mi.RANK" +
+      " ,      mi.DIFFICULTY" +
       " ,      NVL(r.GRADE, '')" +
       " ,      NVL(r.IS_ALL_COOL, FALSE)" +
       " ,      NVL(r.IS_NO_MISS, FALSE)" +

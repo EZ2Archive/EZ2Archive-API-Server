@@ -19,6 +19,8 @@ public class AchieveVO
 
   private int rank;
 
+  private String difficulty;
+
   private String grade;
 
   private boolean isAllCool;
@@ -29,13 +31,14 @@ public class AchieveVO
 
   public AchieveVO(){}
 
-  public AchieveVO(Long recordId, Long musicInfoId, String name, int score, int rank, String grade, boolean isAllCool, boolean isNoMiss, String imagePath)
+  public AchieveVO(Long recordId, Long musicInfoId, String name, int score, int rank, String difficulty, String grade, boolean isAllCool, boolean isNoMiss, String imagePath)
   {
     this.recordId = recordId;
     this.musicInfoId = musicInfoId;
     this.name = name;
     this.score = score;
     this.rank = rank;
+    this.difficulty = difficulty;
     this.grade = grade;
     this.isAllCool = isAllCool;
     this.isNoMiss = isNoMiss;
@@ -43,10 +46,10 @@ public class AchieveVO
   }
 
   /**
-   * QLRM 전용 생성자
+   * QLRM 전용 Long/BigInteger 변환 생성자
    */
-  public AchieveVO(BigInteger recordId, BigInteger musicInfoId, String name, int score, int rank, String grade, boolean isAllCool, boolean isNoMiss, String imagePath)
+  public AchieveVO(BigInteger recordId, BigInteger musicInfoId, String name, int score, int rank, String difficulty, String grade, boolean isAllCool, boolean isNoMiss, String imagePath)
   {
-    this(recordId.longValue(), musicInfoId.longValue(), name, score, rank, grade, isAllCool, isNoMiss, imagePath);
+    this(recordId.longValue(), musicInfoId.longValue(), name, score, rank, difficulty, grade, isAllCool, isNoMiss, imagePath);
   }
 }
