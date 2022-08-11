@@ -12,8 +12,8 @@ public class DefaultRecordValidator implements Validator<Record>
   {
     return isMusicAvailable(record.getMusic())
       && isMemberAvailable(record.getMember())
-      && isScoreAvailable(record.getScore(), record.getMusic().getBestScore())
-      && isGradeAvailable(record.getGrade());
+      && isScoreAvailable(record.getRecordDetail().getScore(), record.getMusic().getBestScore())
+      && isGradeAvailable(record.getRecordDetail().getGrade());
   }
 
   private boolean isMusicAvailable(MusicInfo music)

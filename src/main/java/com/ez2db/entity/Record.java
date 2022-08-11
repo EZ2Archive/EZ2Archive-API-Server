@@ -4,8 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
 
 /**
  * 기록 엔티티 클래스
@@ -29,21 +28,11 @@ public class Record
   @JoinColumn(name = "member_id", nullable = false)
   private Member member;
 
-  /** No Miss 여부 */
-  private boolean isNoMiss;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "record_detail_id", nullable = false)
+  private RecordDetail recordDetail;
 
-  /** 올 Cool 여부 */
-  private boolean isAllCool;
-
-  /** 스코어 */
-  private int score;
-
-  /** 등급 */
   @Column(nullable = false)
-  @Enumerated(EnumType.STRING)
-  private Grade grade;
-
-  @OneToMany(mappedBy = "record")
-  private List<RecordHistory> recordHistoryList = new ArrayList<>();
+  private LocalDateTime addTime;
 
 }

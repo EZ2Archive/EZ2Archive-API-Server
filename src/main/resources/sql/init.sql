@@ -32,49 +32,49 @@ insert into PUBLIC.MUSIC_INFO (MUSIC_INFO_ID, ADD_TIME, ARTIST, BEST_SCORE, CATE
 insert into PUBLIC.MUSIC_INFO (MUSIC_INFO_ID, ADD_TIME, ARTIST, BEST_SCORE, CATEGORY, DESCRIPTION, DIFFICULTY, KEY_TYPE, LEVEL, NAME, RANK, FILE_ID) values (27, '2022-08-10 13:56:11.000000', 'Morimori Atsushi', 1100000, 'R2021', 'testData', 'HD',  'FIVE', 16, 'PUPA', 1, 1);
 insert into PUBLIC.MUSIC_INFO (MUSIC_INFO_ID, ADD_TIME, ARTIST, BEST_SCORE, CATEGORY, DESCRIPTION, DIFFICULTY, KEY_TYPE, LEVEL, NAME, RANK, FILE_ID) values (28, '2022-08-10 13:56:11.000000', 'Morimori Atsushi', 1100000, 'R2021', 'testData', 'SHD', 'FIVE', 20, 'PUPA', 5, 1);
 
--- TEST RECORD INIT
-INSERT INTO RECORD(record_id, grade, is_all_cool, is_no_miss, score, member_id, music_info_id) VALUES(29, 'SP', FALSE, FALSE, 1110000, 2, 8);
-INSERT INTO RECORD(record_id, grade, is_all_cool, is_no_miss, score, member_id, music_info_id) VALUES(30, 'SP', FALSE, FALSE, 1110000, 2, 12);
-INSERT INTO RECORD(record_id, grade, is_all_cool, is_no_miss, score, member_id, music_info_id) VALUES(31, 'SP', FALSE, FALSE, 1110000, 2, 15);
-INSERT INTO RECORD(record_id, grade, is_all_cool, is_no_miss, score, member_id, music_info_id) VALUES(32, 'SP', FALSE, FALSE, 1110000, 2, 16);
-INSERT INTO RECORD(record_id, grade, is_all_cool, is_no_miss, score, member_id, music_info_id) VALUES(33, 'SP', FALSE, FALSE, 1110000, 2, 19);
-INSERT INTO RECORD(record_id, grade, is_all_cool, is_no_miss, score, member_id, music_info_id) VALUES(34, 'SP', FALSE, FALSE, 1110000, 2, 20);
-INSERT INTO RECORD(record_id, grade, is_all_cool, is_no_miss, score, member_id, music_info_id) VALUES(35, 'SP', FALSE, FALSE, 1110000, 2, 23);
-INSERT INTO RECORD(record_id, grade, is_all_cool, is_no_miss, score, member_id, music_info_id) VALUES(36, 'SP', FALSE, FALSE, 1110000, 2, 24);
-INSERT INTO RECORD(record_id, grade, is_all_cool, is_no_miss, score, member_id, music_info_id) VALUES(37, 'SP', FALSE, FALSE, 1110000, 2, 27);
-INSERT INTO RECORD(record_id, grade, is_all_cool, is_no_miss, score, member_id, music_info_id) VALUES(38, 'SP', FALSE, FALSE, 1110000, 2, 28);
-INSERT INTO RECORD(record_id, grade, is_all_cool, is_no_miss, score, member_id, music_info_id) VALUES(39, 'SP', FALSE, FALSE, 1110000, 3, 8);
-INSERT INTO RECORD(record_id, grade, is_all_cool, is_no_miss, score, member_id, music_info_id) VALUES(40, 'SP', FALSE, FALSE, 1110000, 3, 12);
-INSERT INTO RECORD(record_id, grade, is_all_cool, is_no_miss, score, member_id, music_info_id) VALUES(41, 'SP', FALSE, FALSE, 1110000, 3, 15);
-INSERT INTO RECORD(record_id, grade, is_all_cool, is_no_miss, score, member_id, music_info_id) VALUES(42, 'SP', FALSE, FALSE, 1110000, 3, 16);
-INSERT INTO RECORD(record_id, grade, is_all_cool, is_no_miss, score, member_id, music_info_id) VALUES(43, 'SP', FALSE, FALSE, 1110000, 3, 19);
-INSERT INTO RECORD(record_id, grade, is_all_cool, is_no_miss, score, member_id, music_info_id) VALUES(44, 'SP', FALSE, FALSE, 1110000, 3, 20);
-INSERT INTO RECORD(record_id, grade, is_all_cool, is_no_miss, score, member_id, music_info_id) VALUES(45, 'SP', FALSE, FALSE, 1110000, 3, 23);
-INSERT INTO RECORD(record_id, grade, is_all_cool, is_no_miss, score, member_id, music_info_id) VALUES(46, 'SP', FALSE, FALSE, 1110000, 3, 24);
-INSERT INTO RECORD(record_id, grade, is_all_cool, is_no_miss, score, member_id, music_info_id) VALUES(47, 'SP', FALSE, FALSE, 1110000, 3, 27);
-INSERT INTO RECORD(record_id, grade, is_all_cool, is_no_miss, score, member_id, music_info_id) VALUES(48, 'SP', FALSE, FALSE, 1110000, 3, 28);
+-- TEST RECORD DETAIL
+INSERT INTO RECORD_DETAIL(record_detail_id, add_time, grade, is_all_cool, is_no_miss, score, music_info_id) VALUES(29, '2022-08-10 13:56:11.000000', 'SP', FALSE, FALSE, 1110000, 8);
+INSERT INTO RECORD_DETAIL(record_detail_id, add_time, grade, is_all_cool, is_no_miss, score, music_info_id) VALUES(30, '2022-08-10 13:56:11.000000', 'SP', FALSE, FALSE, 1110000, 12);
+INSERT INTO RECORD_DETAIL(record_detail_id, add_time, grade, is_all_cool, is_no_miss, score, music_info_id) VALUES(31, '2022-08-10 13:56:11.000000', 'SP', FALSE, FALSE, 1110000, 15);
+INSERT INTO RECORD_DETAIL(record_detail_id, add_time, grade, is_all_cool, is_no_miss, score, music_info_id) VALUES(32, '2022-08-10 13:56:11.000000', 'SP', FALSE, FALSE, 1110000, 16);
+INSERT INTO RECORD_DETAIL(record_detail_id, add_time, grade, is_all_cool, is_no_miss, score, music_info_id) VALUES(33, '2022-08-10 13:56:11.000000', 'SP', FALSE, FALSE, 1110000, 19);
+INSERT INTO RECORD_DETAIL(record_detail_id, add_time, grade, is_all_cool, is_no_miss, score, music_info_id) VALUES(34, '2022-08-10 13:56:11.000000', 'SP', FALSE, FALSE, 1110000, 20);
+INSERT INTO RECORD_DETAIL(record_detail_id, add_time, grade, is_all_cool, is_no_miss, score, music_info_id) VALUES(35, '2022-08-10 13:56:11.000000', 'SP', FALSE, FALSE, 1110000, 23);
+INSERT INTO RECORD_DETAIL(record_detail_id, add_time, grade, is_all_cool, is_no_miss, score, music_info_id) VALUES(36, '2022-08-10 13:56:11.000000', 'SP', FALSE, FALSE, 1110000, 24);
+INSERT INTO RECORD_DETAIL(record_detail_id, add_time, grade, is_all_cool, is_no_miss, score, music_info_id) VALUES(37, '2022-08-10 13:56:11.000000', 'SP', FALSE, FALSE, 1110000, 27);
+INSERT INTO RECORD_DETAIL(record_detail_id, add_time, grade, is_all_cool, is_no_miss, score, music_info_id) VALUES(38, '2022-08-10 13:56:11.000000', 'SP', FALSE, FALSE, 1110000, 28);
+INSERT INTO RECORD_DETAIL(record_detail_id, add_time, grade, is_all_cool, is_no_miss, score, music_info_id) VALUES(39, '2022-08-10 13:56:11.000000', 'SP', FALSE, FALSE, 1110000, 8);
+INSERT INTO RECORD_DETAIL(record_detail_id, add_time, grade, is_all_cool, is_no_miss, score, music_info_id) VALUES(40, '2022-08-10 13:56:11.000000', 'SP', FALSE, FALSE, 1110000, 12);
+INSERT INTO RECORD_DETAIL(record_detail_id, add_time, grade, is_all_cool, is_no_miss, score, music_info_id) VALUES(41, '2022-08-10 13:56:11.000000', 'SP', FALSE, FALSE, 1110000, 15);
+INSERT INTO RECORD_DETAIL(record_detail_id, add_time, grade, is_all_cool, is_no_miss, score, music_info_id) VALUES(42, '2022-08-10 13:56:11.000000', 'SP', FALSE, FALSE, 1110000, 16);
+INSERT INTO RECORD_DETAIL(record_detail_id, add_time, grade, is_all_cool, is_no_miss, score, music_info_id) VALUES(43, '2022-08-10 13:56:11.000000', 'SP', FALSE, FALSE, 1110000, 19);
+INSERT INTO RECORD_DETAIL(record_detail_id, add_time, grade, is_all_cool, is_no_miss, score, music_info_id) VALUES(44, '2022-08-10 13:56:11.000000', 'SP', FALSE, FALSE, 1110000, 20);
+INSERT INTO RECORD_DETAIL(record_detail_id, add_time, grade, is_all_cool, is_no_miss, score, music_info_id) VALUES(45, '2022-08-10 13:56:11.000000', 'SP', FALSE, FALSE, 1110000, 23);
+INSERT INTO RECORD_DETAIL(record_detail_id, add_time, grade, is_all_cool, is_no_miss, score, music_info_id) VALUES(46, '2022-08-10 13:56:11.000000', 'SP', FALSE, FALSE, 1110000, 24);
+INSERT INTO RECORD_DETAIL(record_detail_id, add_time, grade, is_all_cool, is_no_miss, score, music_info_id) VALUES(47, '2022-08-10 13:56:11.000000', 'SP', FALSE, FALSE, 1110000, 27);
+INSERT INTO RECORD_DETAIL(record_detail_id, add_time, grade, is_all_cool, is_no_miss, score, music_info_id) VALUES(48, '2022-08-10 13:56:11.000000', 'SP', FALSE, FALSE, 1110000, 28);
 
--- TEST RECORD HISTORY INIT
-INSERT INTO RECORD_HISTORY(record_history_id, record_id, add_time) VALUES(49, 29 , '2022-08-07 20:46');
-INSERT INTO RECORD_HISTORY(record_history_id, record_id, add_time) VALUES(50, 30 , '2022-08-07 20:46');
-INSERT INTO RECORD_HISTORY(record_history_id, record_id, add_time) VALUES(51, 31 , '2022-08-07 20:46');
-INSERT INTO RECORD_HISTORY(record_history_id, record_id, add_time) VALUES(52, 32 , '2022-08-07 20:46');
-INSERT INTO RECORD_HISTORY(record_history_id, record_id, add_time) VALUES(53, 33 , '2022-08-07 20:46');
-INSERT INTO RECORD_HISTORY(record_history_id, record_id, add_time) VALUES(54, 34 , '2022-08-07 20:46');
-INSERT INTO RECORD_HISTORY(record_history_id, record_id, add_time) VALUES(55, 35 , '2022-08-07 20:46');
-INSERT INTO RECORD_HISTORY(record_history_id, record_id, add_time) VALUES(56, 36 , '2022-08-07 20:46');
-INSERT INTO RECORD_HISTORY(record_history_id, record_id, add_time) VALUES(57, 37 , '2022-08-07 20:46');
-INSERT INTO RECORD_HISTORY(record_history_id, record_id, add_time) VALUES(58, 38 , '2022-08-07 20:46');
-INSERT INTO RECORD_HISTORY(record_history_id, record_id, add_time) VALUES(59, 39 , '2022-08-07 20:46');
-INSERT INTO RECORD_HISTORY(record_history_id, record_id, add_time) VALUES(60, 40 , '2022-08-07 20:46');
-INSERT INTO RECORD_HISTORY(record_history_id, record_id, add_time) VALUES(61, 41 , '2022-08-07 20:46');
-INSERT INTO RECORD_HISTORY(record_history_id, record_id, add_time) VALUES(62, 42 , '2022-08-07 20:46');
-INSERT INTO RECORD_HISTORY(record_history_id, record_id, add_time) VALUES(63, 43 , '2022-08-07 20:46');
-INSERT INTO RECORD_HISTORY(record_history_id, record_id, add_time) VALUES(64, 44 , '2022-08-07 20:46');
-INSERT INTO RECORD_HISTORY(record_history_id, record_id, add_time) VALUES(65, 45 , '2022-08-07 20:46');
-INSERT INTO RECORD_HISTORY(record_history_id, record_id, add_time) VALUES(66, 46 , '2022-08-07 20:46');
-INSERT INTO RECORD_HISTORY(record_history_id, record_id, add_time) VALUES(67, 47 , '2022-08-07 20:46');
-INSERT INTO RECORD_HISTORY(record_history_id, record_id, add_time) VALUES(68, 48 , '2022-08-07 20:46');
+-- TEST RECORD INIT
+INSERT INTO RECORD(record_id, add_time, record_detail_id, member_id, music_info_id) VALUES(49, '2022-08-10 13:56:11.000000', 29, 2, 8);
+INSERT INTO RECORD(record_id, add_time, record_detail_id, member_id, music_info_id) VALUES(50, '2022-08-10 13:56:11.000000', 30, 2, 12);
+INSERT INTO RECORD(record_id, add_time, record_detail_id, member_id, music_info_id) VALUES(51, '2022-08-10 13:56:11.000000', 31, 2, 15);
+INSERT INTO RECORD(record_id, add_time, record_detail_id, member_id, music_info_id) VALUES(52, '2022-08-10 13:56:11.000000', 32, 2, 16);
+INSERT INTO RECORD(record_id, add_time, record_detail_id, member_id, music_info_id) VALUES(53, '2022-08-10 13:56:11.000000', 33, 2, 19);
+INSERT INTO RECORD(record_id, add_time, record_detail_id, member_id, music_info_id) VALUES(54, '2022-08-10 13:56:11.000000', 34, 2, 20);
+INSERT INTO RECORD(record_id, add_time, record_detail_id, member_id, music_info_id) VALUES(55, '2022-08-10 13:56:11.000000', 35, 2, 23);
+INSERT INTO RECORD(record_id, add_time, record_detail_id, member_id, music_info_id) VALUES(56, '2022-08-10 13:56:11.000000', 36, 2, 24);
+INSERT INTO RECORD(record_id, add_time, record_detail_id, member_id, music_info_id) VALUES(57, '2022-08-10 13:56:11.000000', 37, 2, 27);
+INSERT INTO RECORD(record_id, add_time, record_detail_id, member_id, music_info_id) VALUES(58, '2022-08-10 13:56:11.000000', 38, 2, 28);
+INSERT INTO RECORD(record_id, add_time, record_detail_id, member_id, music_info_id) VALUES(59, '2022-08-10 13:56:11.000000', 39, 3, 8);
+INSERT INTO RECORD(record_id, add_time, record_detail_id, member_id, music_info_id) VALUES(60, '2022-08-10 13:56:11.000000', 40, 3, 12);
+INSERT INTO RECORD(record_id, add_time, record_detail_id, member_id, music_info_id) VALUES(61, '2022-08-10 13:56:11.000000', 41, 3, 15);
+INSERT INTO RECORD(record_id, add_time, record_detail_id, member_id, music_info_id) VALUES(62, '2022-08-10 13:56:11.000000', 42, 3, 16);
+INSERT INTO RECORD(record_id, add_time, record_detail_id, member_id, music_info_id) VALUES(63, '2022-08-10 13:56:11.000000', 43, 3, 19);
+INSERT INTO RECORD(record_id, add_time, record_detail_id, member_id, music_info_id) VALUES(64, '2022-08-10 13:56:11.000000', 44, 3, 20);
+INSERT INTO RECORD(record_id, add_time, record_detail_id, member_id, music_info_id) VALUES(65, '2022-08-10 13:56:11.000000', 45, 3, 23);
+INSERT INTO RECORD(record_id, add_time, record_detail_id, member_id, music_info_id) VALUES(66, '2022-08-10 13:56:11.000000', 46, 3, 24);
+INSERT INTO RECORD(record_id, add_time, record_detail_id, member_id, music_info_id) VALUES(67, '2022-08-10 13:56:11.000000', 47, 3, 27);
+INSERT INTO RECORD(record_id, add_time, record_detail_id, member_id, music_info_id) VALUES(68, '2022-08-10 13:56:11.000000', 48, 3, 28);
 
 -- COMMIT
 COMMIT;
