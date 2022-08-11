@@ -8,33 +8,33 @@ import com.ez2db.entity.Record;
 public class DefaultRecordValidator implements Validator<Record>
 {
   @Override
-  public boolean isValidate(Record record)
+  public boolean isValid(Record record)
   {
-    return isMusicAvailable(record.getMusic())
-      && isMemberAvailable(record.getMember())
-      && isScoreAvailable(record.getRecordDetail().getScore(), record.getMusic().getBestScore())
-      && isGradeAvailable(record.getRecordDetail().getGrade());
+    return isMusicValid(record.getMusic())
+      && isMemberValid(record.getMember())
+      && isScoreValid(record.getRecordDetail().getScore(), record.getMusic().getBestScore())
+      && isGradeValid(record.getRecordDetail().getGrade());
   }
 
-  private boolean isMusicAvailable(MusicInfo music)
+  private boolean isMusicValid(MusicInfo music)
   {
     return music != null
       && music.getId() != 0;
   }
 
-  private boolean isMemberAvailable(Member member)
+  private boolean isMemberValid(Member member)
   {
     return member != null
       && member.getUserId() != null
       && member.getUserId().isEmpty();
   }
 
-  private boolean isScoreAvailable(int score, int bestScore)
+  private boolean isScoreValid(int score, int bestScore)
   {
     return score >= 0 && score <= bestScore;
   }
 
-  private boolean isGradeAvailable(Grade grade)
+  private boolean isGradeValid(Grade grade)
   {
     return grade != null;
   }

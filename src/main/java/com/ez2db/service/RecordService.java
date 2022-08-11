@@ -35,7 +35,7 @@ public class RecordService
     record.setMember(findMember.get());
     record.setMusic(findMusicInfo.get());
 
-    if(!validator.isValidate(record)) throw new IllegalValueException("잘못된 점수 양식의 요청입니다.");
+    if( !validator.isValid(record) ) throw new IllegalValueException("잘못된 점수 양식의 요청입니다.");
 
     return recordRepository.save(record);
   }
