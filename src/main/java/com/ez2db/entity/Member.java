@@ -46,6 +46,7 @@ public class Member
   private MemberAuthority authority;
 
   @OneToMany(mappedBy = "member")
+  @ApiModelProperty(hidden = true)
   private List<Record> recordList = new ArrayList<>();
 
   /** 사용자 생성 시각 */
