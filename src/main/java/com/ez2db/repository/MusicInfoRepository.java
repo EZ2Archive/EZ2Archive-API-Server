@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -17,19 +16,6 @@ import java.util.Optional;
 public class MusicInfoRepository
 {
   private final EntityManager em;
-
-  public Long save(MusicInfo musicInfo)
-  {
-    em.persist(musicInfo);
-
-    return musicInfo.getId();
-  }
-
-  public List<MusicInfo> findAll()
-  {
-    return em.createQuery("SELECT m FROM MusicInfo m ORDER BY m.addTime DESC", MusicInfo.class)
-      .getResultList();
-  }
 
   public Optional<MusicInfo> findById(Long id)
   {
@@ -47,18 +33,11 @@ public class MusicInfoRepository
     return findMusicInfo;
   }
 
-  public int findMusicInfoCountByKeyTypeWithLevel(KeyType keyType, int level)
+  public Long findMusicInfoCountByKeyTypeWithLevel(KeyType keyType, int level)
   {
-    return em.createQuery("SELECT count(mi) FROM MusicInfo as mi WHERE mi.keyType = :keyType AND mi.level = :level", Integer.class)
+    return em.createQuery("SELECT count(mi) FROM MusicInfo as mi WHERE mi.keyType = :keyType AND mi.level = :level", Long.class)
       .setParameter("keyType", keyType)
       .setParameter("level", level)
       .getSingleResult();
-  }
-
-  public Long delete(MusicInfo musicInfo)
-  {
-    em.remove(musicInfo);
-
-    return musicInfo.getId();
   }
 }

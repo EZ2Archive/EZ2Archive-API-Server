@@ -2,13 +2,16 @@ package com.ez2db.repository;
 
 import com.ez2db.entity.AchieveVO;
 import com.ez2db.entity.KeyType;
+import com.ez2db.entity.OverallVO;
 import lombok.RequiredArgsConstructor;
 import org.qlrm.mapper.JpaResultMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -19,7 +22,7 @@ public class AchievementRepository
   private final JpaResultMapper resultMapper;
 
   @SuppressWarnings("SqlDialectInspection")
-  public List<AchieveVO> findByUserIdWithKeyTypeWithLevel(String userId, KeyType keyType, int level)
+  public List<AchieveVO> findAchieveListByUserIdWithKeyTypeWithLevel(String userId, KeyType keyType, int level)
   {
 //    String query = "SELECT new com.ez2db.entity.AchieveVO(r.id, mi.name, r.score, mi.level, mi.rank, r.grade, concat(mi.imageFile.filePath, mi.imageFile.fileOriginName))  " +
 //      "FROM Member m JOIN m.recordList r JOIN r.music mi  " +
@@ -82,5 +85,53 @@ public class AchievementRepository
         .setParameter("level", level)
       , AchieveVO.class
     );
+  }
+  
+  public OverallVO findOverallByUserIdWithKeyTypeWithLevel(String userId, KeyType keyType, int level)
+  {
+    Optional<OverallVO> findOverallVO;
+
+    String nativeQuery = "" +
+      "SELECT AVG(rd.PERCENTAGE) rateAvg " +
+      ",      0 " +
+      ",      SUM(CASE WHEN rd.IS_ALL_COOL = TRUE THEN 1 ELSE 0 END) allCoolCnt " +
+      ",      SUM(CASE WHEN rd.IS_NO_MISS  = TRUE THEN 1 ELSE 0 END) noMissCnt " +
+      ",      SUM(CASE WHEN rd.GRADE       = 'SPPP' THEN 1 ELSE 0 END) spppCnt " +
+      ",      SUM(CASE WHEN rd.GRADE       = 'SPP' THEN 1 ELSE 0 END) sppCnt " +
+      ",      SUM(CASE WHEN rd.GRADE       = 'SP' THEN 1 ELSE 0 END) spCnt " +
+      "FROM MUSIC_INFO mi   " +
+      "  JOIN ( " +
+      "      SELECT MUSIC_INFO_ID, MEMBER_ID, RECORD_DETAIL_ID, MAX(ADD_TIME) " +
+      "      FROM RECORD " +
+      "      GROUP BY MUSIC_INFO_ID, MEMBER_ID, RECORD_DETAIL_ID " +
+      "      HAVING MEMBER_ID = (   " +
+      "          SELECT MEMBER_ID   " +
+      "          FROM MEMBER   " +
+      "          WHERE USER_ID = :userId " +
+      "      )   " +
+      "  ) r ON mi.MUSIC_INFO_ID = r.MUSIC_INFO_ID   " +
+      "  JOIN RECORD_DETAIL rd ON rd.RECORD_DETAIL_ID = r.RECORD_DETAIL_ID " +
+      "WHERE mi.KEY_TYPE = :keyType " +
+      "AND   mi.LEVEL = :level " +
+      "GROUP BY r.MEMBER_ID";
+
+    try
+    {
+      findOverallVO = Optional.of(
+        resultMapper.uniqueResult(
+          em.createNativeQuery(nativeQuery)
+            .setParameter("userId", userId)
+            .setParameter("keyType", keyType.name())
+            .setParameter("level", level)
+          , OverallVO.class
+        )
+      );
+    }
+    catch( NoResultException e )
+    {
+      findOverallVO = Optional.of(new OverallVO());
+    }
+
+    return findOverallVO.get();
   }
 }

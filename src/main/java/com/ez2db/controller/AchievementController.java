@@ -6,6 +6,7 @@ import com.ez2db.common.auth.TokenProvider;
 import com.ez2db.common.response.CommonResponse;
 import com.ez2db.entity.AchieveVO;
 import com.ez2db.entity.KeyType;
+import com.ez2db.entity.OverallVO;
 import com.ez2db.service.AchievementService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -26,21 +27,35 @@ import java.util.List;
 @RequestMapping("/achievement")
 public class AchievementController
 {
-  private final AchievementService recordService;
+  private final AchievementService achievementService;
 
   private final TokenProvider<String, JwtToken> tokenProvider;
 
   @Operation(summary = "[T] 성과표 목록 조회")
-  @RequestMapping(method = RequestMethod.GET, value = "/{keyType}/{level}")
+  @RequestMapping(method = RequestMethod.GET, value = "/list/{keyType}/{level}")
   @RequiredToken
-  public ResponseEntity<CommonResponse<List<AchieveVO>>> musicInfoListGet(@ApiIgnore JwtToken token, @PathVariable KeyType keyType, @PathVariable int level)
+  public ResponseEntity<CommonResponse<List<AchieveVO>>> achievementListGet(@ApiIgnore JwtToken token, @PathVariable KeyType keyType, @PathVariable int level)
   {
     final String userId = tokenProvider.getIdFromToken(token);
 
-    final List<AchieveVO> achievementList = recordService.findAchievementList(userId, keyType, level);
+    final List<AchieveVO> achievementList = achievementService.findAchievementList(userId, keyType, level);
 
     return ResponseEntity.ok().body(
       CommonResponse.success(achievementList)
+    );
+  }
+
+  @Operation(summary = "[T] 성과표 종합 조회")
+  @RequestMapping(method = RequestMethod.GET, value = "/overall/{keyType}/{level}")
+  @RequiredToken
+  public ResponseEntity<CommonResponse<OverallVO>> achievementOverallGet(@ApiIgnore JwtToken token, @PathVariable KeyType keyType, @PathVariable int level)
+  {
+    final String userId = tokenProvider.getIdFromToken(token);
+
+    final OverallVO overallVO = achievementService.findAchievementOverall(userId, keyType, level);
+
+    return ResponseEntity.ok().body(
+      CommonResponse.success(overallVO)
     );
   }
 
