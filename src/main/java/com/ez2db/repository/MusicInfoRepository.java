@@ -1,5 +1,6 @@
 package com.ez2db.repository;
 
+import com.ez2db.entity.KeyType;
 import com.ez2db.entity.MusicInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -44,6 +45,14 @@ public class MusicInfoRepository
       // ignore
     }
     return findMusicInfo;
+  }
+
+  public int findMusicInfoCountByKeyTypeWithLevel(KeyType keyType, int level)
+  {
+    return em.createQuery("SELECT count(mi) FROM MusicInfo as mi WHERE mi.keyType = :keyType AND mi.level = :level", Integer.class)
+      .setParameter("keyType", keyType)
+      .setParameter("level", level)
+      .getSingleResult();
   }
 
   public Long delete(MusicInfo musicInfo)

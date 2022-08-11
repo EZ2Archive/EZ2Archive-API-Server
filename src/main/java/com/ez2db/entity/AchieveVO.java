@@ -17,6 +17,8 @@ public class AchieveVO
 
   private int score;
 
+  private double percentage;
+
   private int rank;
 
   private String difficulty;
@@ -31,12 +33,13 @@ public class AchieveVO
 
   public AchieveVO(){}
 
-  public AchieveVO(Long recordId, Long musicInfoId, String name, int score, int rank, String difficulty, String grade, boolean isAllCool, boolean isNoMiss, String imagePath)
+  public AchieveVO(Long recordId, Long musicInfoId, String name, int score, Double percentage, int rank, String difficulty, String grade, boolean isAllCool, boolean isNoMiss, String imagePath)
   {
     this.recordId = recordId;
     this.musicInfoId = musicInfoId;
     this.name = name;
     this.score = score;
+    this.percentage = percentage;
     this.rank = rank;
     this.difficulty = difficulty;
     this.grade = grade;
@@ -48,8 +51,8 @@ public class AchieveVO
   /**
    * QLRM 전용 Long/BigInteger 변환 생성자
    */
-  public AchieveVO(BigInteger recordId, BigInteger musicInfoId, String name, int score, int rank, String difficulty, String grade, boolean isAllCool, boolean isNoMiss, String imagePath)
+  public AchieveVO(BigInteger recordId, BigInteger musicInfoId, String name, int score, Double percentage, int rank, String difficulty, String grade, boolean isAllCool, boolean isNoMiss, String imagePath)
   {
-    this(recordId.longValue(), musicInfoId.longValue(), name, score, rank, difficulty, grade, isAllCool, isNoMiss, imagePath);
+    this(recordId.longValue(), musicInfoId.longValue(), name, score, percentage, rank, difficulty, grade, isAllCool, isNoMiss, imagePath);
   }
 }

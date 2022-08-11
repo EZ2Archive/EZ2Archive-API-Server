@@ -29,6 +29,9 @@ public class RecordDetail
   /** 스코어 */
   private int score;
 
+  /** 정확도 */
+  private float percentage;
+
   /** 등급(S+++, S+, A+, B) */
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)

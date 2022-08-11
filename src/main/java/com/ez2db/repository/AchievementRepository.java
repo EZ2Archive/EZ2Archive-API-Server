@@ -13,11 +13,12 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class AchieveRepository
+public class AchievementRepository
 {
   private final EntityManager em;
   private final JpaResultMapper resultMapper;
 
+  @SuppressWarnings("SqlDialectInspection")
   public List<AchieveVO> findByUserIdWithKeyTypeWithLevel(String userId, KeyType keyType, int level)
   {
 //    String query = "SELECT new com.ez2db.entity.AchieveVO(r.id, mi.name, r.score, mi.level, mi.rank, r.grade, concat(mi.imageFile.filePath, mi.imageFile.fileOriginName))  " +
@@ -52,6 +53,7 @@ public class AchieveRepository
       ",      mi.MUSIC_INFO_ID " +
       ",      mi.NAME " +
       ",      NVL(rd.SCORE, -1) " +
+      ",      NVL(rd.PERCENTAGE, -1) " +
       ",      mi.RANK " +
       ",      mi.DIFFICULTY " +
       ",      NVL(rd.GRADE, '') " +
