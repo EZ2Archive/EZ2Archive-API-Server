@@ -3,7 +3,6 @@ package com.ez2db.common.aspect;
 import com.ez2db.common.auth.JwtToken;
 import com.ez2db.common.auth.TokenProvider;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -17,9 +16,8 @@ import java.util.Locale;
 
 @Aspect
 @Component
-@Slf4j
 @RequiredArgsConstructor
-public class AuthAspect
+public class RequiredTokenAspect
 {
   private final TokenProvider<String, JwtToken> tokenProvider;
 
