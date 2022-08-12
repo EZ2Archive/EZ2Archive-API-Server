@@ -12,10 +12,7 @@ import com.ez2db.service.AchievementService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
@@ -71,6 +68,20 @@ public class AchievementController
 
     return ResponseEntity.ok().body(
       CommonResponse.success(recordDetailList)
+    );
+  }
+
+  @Operation(summary = "[T] 성과표 점수 기록")
+  @RequestMapping(method = RequestMethod.POST, value="/save")
+  @RequiredToken
+  public ResponseEntity<CommonResponse<?>> achievementSavePost(@ApiIgnore JwtToken token, @RequestBody RecordDetail recordDetail)
+  {
+    final String userId = tokenProvider.getIdFromToken(token);
+
+    achievementService.saveAchievementRecord(userId, recordDetail);
+
+    return ResponseEntity.ok().body(
+      CommonResponse.success()
     );
   }
 

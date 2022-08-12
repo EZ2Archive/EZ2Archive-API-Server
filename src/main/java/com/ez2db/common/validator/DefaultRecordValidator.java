@@ -27,7 +27,7 @@ public class DefaultRecordValidator implements Validator<Record>
   {
     return member != null
       && member.getUserId() != null
-      && member.getUserId().isEmpty();
+      && !member.getUserId().isEmpty();
   }
 
   private boolean isScoreValid(int score, int bestScore)
