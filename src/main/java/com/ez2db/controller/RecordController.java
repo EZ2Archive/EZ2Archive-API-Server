@@ -1,10 +1,10 @@
 package com.ez2db.controller;
 
-import com.ez2db.common.auth.JwtToken;
 import com.ez2db.common.aspect.RequiredToken;
+import com.ez2db.common.auth.JwtToken;
 import com.ez2db.common.auth.TokenProvider;
 import com.ez2db.common.response.CommonResponse;
-import com.ez2db.entity.Record;
+import com.ez2db.entity.RecordDetail;
 import com.ez2db.service.RecordService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -26,11 +26,11 @@ public class RecordController
   @Operation(summary = "[T] 점수 저장")
   @RequestMapping(method = RequestMethod.POST, value = "/save/{musicInfoId}")
   @RequiredToken
-  public ResponseEntity<CommonResponse<?>> savePost(@ApiIgnore JwtToken token, @RequestBody Record record, @PathVariable Long musicInfoId)
+  public ResponseEntity<CommonResponse<?>> savePost(@ApiIgnore JwtToken token, @RequestBody RecordDetail recordDetail, @PathVariable Long musicInfoId)
   {
     String userId = tokenProvider.getIdFromToken(token);
 
-    Long recordId = recordService.save(userId, musicInfoId, record);
+    Long recordId = recordService.save(userId, musicInfoId, recordDetail);
 
     return ResponseEntity.created(URI.create("/record/" + recordId)).body(
       CommonResponse.success()

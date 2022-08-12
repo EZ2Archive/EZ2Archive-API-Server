@@ -1,10 +1,15 @@
 package com.ez2db.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -38,5 +43,11 @@ public class RecordDetail
   private Grade grade;
 
   @Column(nullable = false)
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
   private LocalDateTime addTime;
+  
+  @OneToMany(mappedBy = "recordDetail")
+  @JsonIgnore
+  private List<Record> recordList;
 }

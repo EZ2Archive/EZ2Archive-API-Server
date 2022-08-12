@@ -6,6 +6,7 @@ import com.ez2db.common.validator.Validator;
 import com.ez2db.entity.Member;
 import com.ez2db.entity.MusicInfo;
 import com.ez2db.entity.Record;
+import com.ez2db.entity.RecordDetail;
 import com.ez2db.repository.MemberRepository;
 import com.ez2db.repository.MusicInfoRepository;
 import com.ez2db.repository.RecordRepository;
@@ -23,8 +24,9 @@ public class RecordService
   private final MemberRepository memberRepository;
   private final Validator<Record> validator;
 
-  public Long save(String userId, Long musicInfoId, Record record)
+  public Long save(String userId, Long musicInfoId, RecordDetail recordDetail)
   {
+    Record record = new Record();
     Optional<Member> findMember = memberRepository.findByUserId(userId);
 
     Optional<MusicInfo> findMusicInfo = musicInfoRepository.findById(musicInfoId);
@@ -34,6 +36,7 @@ public class RecordService
 
     record.setMember(findMember.get());
     record.setMusic(findMusicInfo.get());
+    record.setRecordDetail(recordDetail);
 
     if( !validator.isValid(record) ) throw new IllegalValueException("잘못된 점수 양식의 요청입니다.");
 

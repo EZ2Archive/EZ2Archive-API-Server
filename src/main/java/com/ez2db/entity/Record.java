@@ -19,16 +19,16 @@ public class Record
   private Long id;
 
   /** 음원 정보 */
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "music_info_id", nullable = false)
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+  @JoinColumn(name = "music_info_id")
   private MusicInfo music;
 
   /** 사용자 정보 */
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
   @JoinColumn(name = "member_id", nullable = false)
   private Member member;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
   @JoinColumn(name = "record_detail_id", nullable = false)
   private RecordDetail recordDetail;
 

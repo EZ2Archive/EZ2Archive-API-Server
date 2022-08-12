@@ -14,10 +14,12 @@ public class RecordRepository
 {
   private final EntityManager em;
 
+  @Transactional
   public Long save(Record record)
   {
     em.persist(record);
 
     return record.getId();
   }
+
 }

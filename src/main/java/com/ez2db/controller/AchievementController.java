@@ -7,6 +7,7 @@ import com.ez2db.common.response.CommonResponse;
 import com.ez2db.entity.AchieveVO;
 import com.ez2db.entity.KeyType;
 import com.ez2db.entity.OverallVO;
+import com.ez2db.entity.RecordDetail;
 import com.ez2db.service.AchievementService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -56,6 +57,20 @@ public class AchievementController
 
     return ResponseEntity.ok().body(
       CommonResponse.success(overallVO)
+    );
+  }
+
+  @Operation(summary = "[T] 성과표 점수 히스토리 조회")
+  @RequestMapping(method = RequestMethod.GET, value="/history/{musicInfoId}")
+  @RequiredToken
+  public ResponseEntity<CommonResponse<List<RecordDetail>>> achievementHistoryGet(@ApiIgnore JwtToken token, @PathVariable Long musicInfoId)
+  {
+    final String userId = tokenProvider.getIdFromToken(token);
+
+    List<RecordDetail> recordDetailList = achievementService.findAchievementHistory(userId, musicInfoId);
+
+    return ResponseEntity.ok().body(
+      CommonResponse.success(recordDetailList)
     );
   }
 

@@ -76,5 +76,8 @@ INSERT INTO RECORD(record_id, add_time, record_detail_id, member_id, music_info_
 INSERT INTO RECORD(record_id, add_time, record_detail_id, member_id, music_info_id) VALUES(67, '2022-08-10 13:56:11.000000', 47, 3, 27);
 INSERT INTO RECORD(record_id, add_time, record_detail_id, member_id, music_info_id) VALUES(68, '2022-08-10 13:56:11.000000', 48, 3, 28);
 
+INSERT INTO RECORD_DETAIL(record_detail_id, add_time, grade, is_all_cool, is_no_miss, score, percentage, music_info_id) VALUES(69, '2022-08-14 13:56:11.000000', 'S', FALSE, FALSE, 980000, 91.25, 19);
+INSERT INTO RECORD(record_id, add_time, record_detail_id, member_id, music_info_id) VALUES(70, '2022-08-14 13:56:11.000000', 69, 2, 19);
+
 -- COMMIT
 COMMIT;
