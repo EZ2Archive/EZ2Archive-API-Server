@@ -1,4 +1,4 @@
-package com.ez2db.entity;
+package com.ez2db.vo;
 
 import lombok.Getter;
 import lombok.Setter;
