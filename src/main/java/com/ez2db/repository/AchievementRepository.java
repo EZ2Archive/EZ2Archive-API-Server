@@ -105,14 +105,18 @@ public class AchievementRepository
       ",      SUM(CASE WHEN rd.GRADE       = 'SP' THEN 1 ELSE 0 END) spCnt  " +
       "FROM MUSIC_INFO mi    " +
       "  JOIN (  " +
-      "      SELECT MUSIC_INFO_ID, MEMBER_ID, RECORD_DETAIL_ID, MAX(ADD_TIME)  " +
-      "      FROM RECORD  " +
-      "      GROUP BY MUSIC_INFO_ID, MEMBER_ID, RECORD_DETAIL_ID  " +
-      "      HAVING MEMBER_ID = (    " +
-      "          SELECT MEMBER_ID    " +
-      "          FROM MEMBER    " +
-      "          WHERE USER_ID = :userId  " +
-      "      )    " +
+      "    SELECT tr2.RECORD_DETAIL_ID, tr2.MUSIC_INFO_ID, tr2.MEMBER_ID, tr2.ADD_TIME " +
+      "    FROM ( " +
+      "      SELECT MUSIC_INFO_ID, MEMBER_ID, MAX(ADD_TIME) as ADD_TIME " +
+      "      FROM RECORD tr2 " +
+      "      GROUP BY MUSIC_INFO_ID, MEMBER_ID " +
+      "      HAVING MEMBER_ID = ( " +
+      "        SELECT MEMBER_ID " +
+      "        FROM MEMBER " +
+      "        WHERE USER_ID = :userId " +
+      "      ) " +
+      "    ) tr " +
+      "    LEFT JOIN RECORD tr2 ON tr2.MUSIC_INFO_ID = tr.MUSIC_INFO_ID AND tr2.ADD_TIME = tr.ADD_TIME AND tr2.MEMBER_ID = tr.MEMBER_ID " +
       "  ) r ON mi.MUSIC_INFO_ID = r.MUSIC_INFO_ID    " +
       "  JOIN RECORD_DETAIL rd ON rd.RECORD_DETAIL_ID = r.RECORD_DETAIL_ID  " +
       "WHERE mi.KEY_TYPE = :keyType  " +
