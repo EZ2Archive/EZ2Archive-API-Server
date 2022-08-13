@@ -34,7 +34,7 @@ public class AchievementService
 
   public OverallVO findAchievementOverall(String userId, KeyType keyType, int level)
   {
-    Long totalCnt = musicInfoRepository.findMusicInfoCountByKeyTypeWithLevel(keyType, level);
+    Long totalCnt = musicInfoRepository.countByKeyTypeAndLevel(keyType, level);
 
     OverallVO overallVO = achieveRepository.findOverallByUserIdWithKeyTypeWithLevel(userId, keyType, level);
 

@@ -1,5 +1,10 @@
 package com.ez2db.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -57,11 +62,15 @@ public class MusicInfo
   /** 음원 가용 최고 점수 */
   private int bestScore;
 
+  @JsonIgnore
+  @ApiModelProperty(hidden = true)
   @OneToMany(mappedBy = "music")
   private List<Record> recordList = new ArrayList<>();
-  
+
   /** 음원 추가 시각 */
   @Column(nullable = false)
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
   private LocalDateTime addTime;
 
   /** etc */

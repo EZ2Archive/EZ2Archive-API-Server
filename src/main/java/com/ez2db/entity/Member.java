@@ -1,5 +1,8 @@
 package com.ez2db.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -51,6 +54,8 @@ public class Member
 
   /** 사용자 생성 시각 */
   @Column(nullable = false)
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
   @ApiModelProperty(hidden = true)
   private LocalDateTime addTime;
 

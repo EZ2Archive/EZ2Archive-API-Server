@@ -2,42 +2,24 @@ package com.ez2db.repository;
 
 import com.ez2db.entity.KeyType;
 import com.ez2db.entity.MusicInfo;
-import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import java.util.Optional;
+import java.util.List;
 
 @Repository
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class MusicInfoRepository
+public interface MusicInfoRepository extends JpaRepository<MusicInfo, Long>
 {
-  private final EntityManager em;
+  Long countByKeyTypeAndLevel(KeyType keyType, int level);
 
-  public Optional<MusicInfo> findById(Long id)
-  {
-    Optional<MusicInfo> findMusicInfo = Optional.empty();
-    try
-    {
-      findMusicInfo = Optional.ofNullable( em.createQuery("SELECT m FROM MusicInfo m WHERE m.id = :id", MusicInfo.class)
-        .setParameter("id", id)
-        .getSingleResult() );
-    }
-    catch( NoResultException e )
-    {
-      // ignore
-    }
-    return findMusicInfo;
-  }
+  @Query("SELECT mi FROM MusicInfo mi JOIN FETCH mi.imageFile i WHERE mi.keyType = :keyType")
+  List<MusicInfo> findMusicInfosByKeyType(KeyType keyType, Sort sort);
 
-  public Long findMusicInfoCountByKeyTypeWithLevel(KeyType keyType, int level)
-  {
-    return em.createQuery("SELECT count(mi) FROM MusicInfo as mi WHERE mi.keyType = :keyType AND mi.level = :level", Long.class)
-      .setParameter("keyType", keyType)
-      .setParameter("level", level)
-      .getSingleResult();
-  }
+  @Query("SELECT mi FROM MusicInfo mi JOIN FETCH mi.imageFile f WHERE mi.keyType = :keyType AND mi.level = :level")
+  List<MusicInfo> findMusicInfosByKeyTypeAndLevel(KeyType keyType, int level, Sort sort);
+
 }
