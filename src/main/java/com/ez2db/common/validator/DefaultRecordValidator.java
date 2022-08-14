@@ -14,6 +14,7 @@ public class DefaultRecordValidator implements Validator<Record>
       && isMemberValid(record.getMember())
       && isScoreValid(record.getRecordDetail().getScore(), record.getMusic().getBestScore())
       && isPercentageValid(record.getRecordDetail().getPercentage())
+      && isBadgeValid(record.getRecordDetail().isAllCool(), record.getRecordDetail().isNoMiss())
       && isGradeValid(record.getRecordDetail().getGrade());
   }
 
@@ -38,6 +39,15 @@ public class DefaultRecordValidator implements Validator<Record>
   private boolean isPercentageValid(double percentage)
   {
     return percentage > 0.00d && percentage <= 100.00d;
+  }
+
+  private boolean isBadgeValid(boolean allCool, boolean noMiss)
+  {
+    if(allCool)
+    {
+      return noMiss;
+    }
+    return true;
   }
 
   private boolean isGradeValid(Grade grade)
