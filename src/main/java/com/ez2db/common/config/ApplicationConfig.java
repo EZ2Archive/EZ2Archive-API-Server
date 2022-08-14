@@ -7,6 +7,8 @@ import com.ez2db.common.validator.DefaultRecordValidator;
 import com.ez2db.common.validator.Validator;
 import com.ez2db.entity.Member;
 import com.ez2db.entity.Record;
+import com.ez2db.handler.DefaultTierHandler;
+import com.ez2db.handler.TierHandler;
 import org.qlrm.mapper.JpaResultMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,4 +28,8 @@ public class ApplicationConfig
 
   @Bean
   public FileHandler<MultipartFile> fileHandler() { return new CommonFileHandler(); }
+
+  @Bean
+  public TierHandler tierHandler() { return new DefaultTierHandler(); }
+
 }
