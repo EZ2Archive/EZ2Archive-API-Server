@@ -1,25 +1,10 @@
 package com.ez2db.repository;
 
 import com.ez2db.entity.Record;
-import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
 
 @Repository
-@RequiredArgsConstructor
-@Transactional(readOnly = true)
-public class RecordRepository
+public interface RecordRepository extends JpaRepository<Record, Long>
 {
-  private final EntityManager em;
-
-  @Transactional
-  public Long save(Record record)
-  {
-    em.persist(record);
-
-    return record.getId();
-  }
-
 }
