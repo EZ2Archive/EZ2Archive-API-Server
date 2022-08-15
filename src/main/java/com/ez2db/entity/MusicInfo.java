@@ -57,6 +57,7 @@ public class MusicInfo
   private int level;
 
   /** 음원 서열 */
+  @Column(name = "ranks")
   private int rank;
 
   /** 음원 가용 최고 점수 */
