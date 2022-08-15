@@ -1,13 +1,15 @@
 package com.ez2db.handler;
 
+import com.ez2db.common.exception.business.IllegalValueException;
 import com.ez2db.entity.KeyType;
+import com.ez2db.entity.TierGrade;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static java.lang.Math.*;
 
-public class DefaultTierHandler implements TierHandler
+public class DefaultTierHandler implements TierHandler<TierGrade>
 {
 
   private static final Map<KeyType, Map<Integer, Integer>> POINT_MAP = new HashMap<>();
@@ -85,5 +87,66 @@ public class DefaultTierHandler implements TierHandler
 
     return round((pow(( 100d * ((double)score / bestScore) - 55d ), 1.209765825d) / 100 * maxPoint) * 1000) / 1000d;
   }
+
+  @Override
+  public double getChangePoint(KeyType keyType, double totalPoint)
+  {
+    double result;
+
+    switch(keyType)
+    {
+      case FOUR:
+        result = totalPoint / 1.2625d;
+        break;
+      case FIVE:
+        result = totalPoint / 1.2965d;
+        break;
+      case SIX:
+        result = totalPoint / 1.308d;
+        break;
+      case EIGHT:
+        result = totalPoint / 1.3d;
+        break;
+      default:
+        throw new IllegalValueException("잘못된 키 타입 정보입니다");
+    }
+    return round(result * 1000) / 1000;
+  }
+
+  @Override
+  public TierGrade getCurrentGrade(double changePoint)
+  {
+    // TierGrade.values()[0] = TierGrade.BEGINNER2
+    TierGrade result = TierGrade.values()[0];
+
+    for ( TierGrade grade : TierGrade.values() )
+    {
+      if( changePoint >= (double)grade.score() )
+        result = grade;
+      else
+        break;
+    }
+    return result;
+  }
+
+  @Override
+  public double getPointUntilNextTier(double changePoint)
+  {
+    TierGrade currentTier = getCurrentGrade(changePoint);
+    double nextScore;
+
+    try
+    {
+      nextScore = TierGrade.values()[currentTier.ordinal() + 1].score();
+    }
+    catch(ArrayIndexOutOfBoundsException e)
+    {
+      // 최고 티어에 도달했을 경우
+      nextScore = changePoint;
+    }
+
+    return round((nextScore - changePoint) * 1000d) / 1000d;
+  }
+
 
 }

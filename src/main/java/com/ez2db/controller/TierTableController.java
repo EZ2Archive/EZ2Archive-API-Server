@@ -7,6 +7,7 @@ import com.ez2db.common.response.CommonResponse;
 import com.ez2db.entity.KeyType;
 import com.ez2db.entity.Tier;
 import com.ez2db.service.TierTableService;
+import com.ez2db.vo.TierInfoVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,12 +28,14 @@ public class TierTableController
 
   @RequestMapping(method = RequestMethod.GET, value="/info/{keyType}")
   @RequiredToken
-  public ResponseEntity<CommonResponse<?>> tierInfoGet(@ApiIgnore JwtToken token, @PathVariable KeyType keyType)
+  public ResponseEntity<CommonResponse<TierInfoVO>> tierInfoGet(@ApiIgnore JwtToken token, @PathVariable KeyType keyType)
   {
     final String userId = tokenProvider.getIdFromToken(token);
 
+    TierInfoVO tierInfoVO = tierTableService.getTierByUserIdAndKeyType(userId, keyType);
+
     return ResponseEntity.ok().body(
-      CommonResponse.success()
+      CommonResponse.success(tierInfoVO)
     );
   }
 

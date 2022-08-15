@@ -18,4 +18,7 @@ public interface TierRepository extends JpaRepository<Tier, Long>
 
   @Query("SELECT t FROM Tier t JOIN FETCH t.member m JOIN FETCH t.music mi JOIN FETCH mi.imageFile i WHERE t.member = :member AND mi.keyType = :keyType")
   List<Tier> findTiersByMemberAndKeyType(Member member, KeyType keyType);
+
+  @Query("SELECT sum(t.point) FROM Tier t JOIN t.member m ON m = :member JOIN t.music mi ON mi.keyType = :keyType")
+  Double findSumPointByMemberAndKeyType(Member member, KeyType keyType);
 }

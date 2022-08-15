@@ -62,6 +62,9 @@ public class MusicInfo
   /** 음원 가용 최고 점수 */
   private int bestScore;
 
+  /** 음원 노트 수 합계 */
+  private int totalNote;
+
   @JsonIgnore
   @ApiModelProperty(hidden = true)
   @OneToMany(mappedBy = "music")
