@@ -24,44 +24,17 @@ public class AchievementRepository
   @SuppressWarnings("SqlDialectInspection")
   public List<AchieveVO> findAchieveListByUserIdWithKeyTypeWithLevel(String userId, KeyType keyType, int level)
   {
-//    String query = "SELECT new com.ez2db.vo.AchieveVO(r.id, mi.name, r.score, mi.level, mi.rank, r.grade, concat(mi.imageFile.filePath, mi.imageFile.fileOriginName))   " +
-//      "FROM Member m JOIN m.recordList r JOIN r.music mi   " +
-//      "WHERE mi.keyType = :keyType   " +
-//      "AND   mi.level   = :level   " +
-//      "AND   m.userId   = :userId ";
-
-//    String query = "  " +
-//      "select new com.ez2db.vo.AchieveVO(  " +
-//      "         (select coalesce(r.id, '')  FROM Record r WHERE r.music.id = mi.id AND r.member.userId = :userId )   " +
-//      ",        mi.id   " +
-//      ",        mi.name   " +
-//      ",        (select r.score             FROM Record r WHERE r.music.id = mi.id AND r.member.userId = :userId )   " +
-//      ",        mi.rank   " +
-//      ",        (select concat(r.grade, '') FROM Record r WHERE r.music.id = mi.id AND r.member.userId = :userId )   " +
-//      ",        (select r.isAllCool         FROM Record r WHERE r.music.id = mi.id AND r.member.userId = :userId )   " +
-//      ",        (select r.isNoMiss          FROM Record r WHERE r.music.id = mi.id AND r.member.userId = :userId )   " +
-//      ",        concat(mi.imageFile.filePath, mi.imageFile.fileOriginName)   " +
-//      ")   " +
-//      "FROM MusicInfo mi   " +
-//      "WHERE mi.keyType = :keyType   " +
-//      "AND mi.level = :level ";
-
-//    return em.createQuery(query, AchieveVO.class)
-//      .setParameter("userId", userId)
-//      .setParameter("keyType", keyType)
-//      .setParameter("level", level)
-//      .getResultList();
     final String nativeQuery = " " +
-      "SELECT NVL(rd.RECORD_DETAIL_ID, -1) " +
+      "SELECT COALESCE(rd.RECORD_DETAIL_ID, -1) " +
       ",      mi.MUSIC_INFO_ID " +
       ",      mi.NAME " +
-      ",      NVL(rd.SCORE, -1) " +
-      ",      NVL(rd.PERCENTAGE, -1) " +
-      ",      mi.RANK " +
+      ",      COALESCE(rd.SCORE, -1) " +
+      ",      COALESCE(rd.PERCENTAGE, -1) " +
+      ",      mi.RANKS " +
       ",      mi.DIFFICULTY " +
-      ",      NVL(rd.GRADE, '') " +
-      ",      NVL(rd.IS_ALL_COOL, FALSE) " +
-      ",      NVL(rd.IS_NO_MISS, FALSE) " +
+      ",      COALESCE(rd.GRADE, '') " +
+      ",      COALESCE(rd.IS_ALL_COOL, FALSE) " +
+      ",      COALESCE(rd.IS_NO_MISS, FALSE) " +
       ",      (SELECT f.FILE_ORIGIN_NAME FROM FILE f WHERE mi.FILE_ID = f.FILE_ID) " +
       "FROM MUSIC_INFO mi " +
       "  LEFT JOIN ( " +
@@ -81,7 +54,7 @@ public class AchievementRepository
       "  LEFT JOIN RECORD_DETAIL rd ON rd.RECORD_DETAIL_ID = r.RECORD_DETAIL_ID " +
       "WHERE mi.KEY_TYPE = :keyType " +
       "AND   mi.LEVEL = :level " +
-      "ORDER BY mi.RANK DESC, mi.NAME ";
+      "ORDER BY mi.RANKS DESC, mi.NAME ";
     
     return resultMapper.list(em.createNativeQuery(nativeQuery)
         .setParameter("userId", userId)
