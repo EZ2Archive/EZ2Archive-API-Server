@@ -45,7 +45,7 @@ public class OverallVO
   }
 
   /**
-   * QLRM 전용 Long/BigInteger 변환 생성자
+   * QLRM 전용 생성자
    */
   public OverallVO(BigDecimal rateAvg, Integer totalCnt, BigInteger allCoolCnt, BigInteger noMissCnt, BigInteger spppCnt, BigInteger sppCnt, BigInteger spCnt)
   {
