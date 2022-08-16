@@ -37,6 +37,7 @@ public class RecordDetail
   private int score;
 
   /** 정확도 */
+  @ApiModelProperty(hidden = true)
   private float percentage;
 
   /** 등급(S+++, S+, A+, B) */
