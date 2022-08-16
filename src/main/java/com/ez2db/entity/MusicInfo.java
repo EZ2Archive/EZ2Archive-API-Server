@@ -30,7 +30,6 @@ public class MusicInfo
   private String name;
 
   /** 아티스트 명 */
-  @Column(nullable = false)
   private String artist;
 
   /** 디스크 이미지 파일 정보 */
@@ -49,7 +48,6 @@ public class MusicInfo
   private MusicDifficulty difficulty;
 
   /** 시리즈(1ST, 7TH, CV, TT...) 카테고리 */
-  @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   private MusicCategory category;
 
