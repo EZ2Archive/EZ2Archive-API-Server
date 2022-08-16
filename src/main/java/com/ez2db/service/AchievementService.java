@@ -31,7 +31,7 @@ public class AchievementService
 
   private final Validator<Record> recordValidator;
 
-  private final TierHandler tierHandler;
+  private final TierHandler<TierGrade> tierHandler;
 
   public List<AchieveVO> findAchievementList(String userId, KeyType keyType, int level)
   {
@@ -71,6 +71,7 @@ public class AchievementService
     final Record record = new Record();
     record.setMember(findMember.get());
     record.setMusic(musicInfo);
+    recordDetail.setPercentage( Math.round(((float)recordDetail.getScore() / musicInfo.getBestScore() * 100f) * 1000f) / 1000f );
     recordDetail.setAddTime(LocalDateTime.now());
     record.setRecordDetail(recordDetail);
     record.setAddTime(LocalDateTime.now());
