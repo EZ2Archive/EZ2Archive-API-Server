@@ -51,4 +51,12 @@ public class OverallVO
   {
     this(rateAvg.doubleValue(), totalCnt.longValue(), allCoolCnt.intValue(), noMissCnt.intValue(), spppCnt.intValue(), sppCnt.intValue(), spCnt.intValue());
   }
+
+  /**
+   * QLRM 전용 생성자 (MySQL)
+   */
+  public OverallVO(Double rateAvg, BigInteger totalCnt, BigDecimal allCoolCnt, BigDecimal noMissCnt, BigDecimal spppCnt, BigDecimal sppCnt, BigDecimal spCnt)
+  {
+    this(rateAvg, totalCnt.longValue(), allCoolCnt.intValue(), noMissCnt.intValue(), spppCnt.intValue(), sppCnt.intValue(), spCnt.intValue());
+  }
 }
