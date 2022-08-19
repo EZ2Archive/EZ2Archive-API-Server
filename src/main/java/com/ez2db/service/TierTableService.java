@@ -30,7 +30,10 @@ public class TierTableService
 
     if( findMember.isEmpty() ) throw new ResourceNotFoundException("사용자 정보가 존재하지 않습니다.");
 
-    final double totalPoint = tierRepository.findSumPointByMemberAndKeyType(findMember.get(), keyType);
+    final Optional<Double> findTotalPoint = tierRepository.findSumPointByMemberAndKeyType(findMember.get(), keyType);
+
+    double totalPoint = findTotalPoint.orElse(0d);
+
     final double changePoint = tierHandler.getChangePoint(keyType, totalPoint);
 
     return TierInfoVO.builder()

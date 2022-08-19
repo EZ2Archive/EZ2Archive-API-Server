@@ -20,5 +20,5 @@ public interface TierRepository extends JpaRepository<Tier, Long>
   List<Tier> findTiersByMemberAndKeyType(Member member, KeyType keyType);
 
   @Query("SELECT sum(t.point) FROM Tier t JOIN t.member m ON m = :member JOIN t.music mi ON mi.keyType = :keyType")
-  Double findSumPointByMemberAndKeyType(Member member, KeyType keyType);
+  Optional<Double> findSumPointByMemberAndKeyType(Member member, KeyType keyType);
 }
