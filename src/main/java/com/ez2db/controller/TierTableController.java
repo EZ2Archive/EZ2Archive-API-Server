@@ -8,6 +8,7 @@ import com.ez2db.entity.KeyType;
 import com.ez2db.entity.Tier;
 import com.ez2db.service.TierTableService;
 import com.ez2db.vo.TierInfoVO;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,7 @@ public class TierTableController
   private final TierTableService tierTableService;
   private final TokenProvider<String, JwtToken> tokenProvider;
 
+  @Operation(summary = "Required = [Token, authority.REGULAR] 티어 정보 조회")
   @RequestMapping(method = RequestMethod.GET, value="/info/{keyType}")
   @RequiredToken
   public ResponseEntity<CommonResponse<TierInfoVO>> tierInfoGet(@ApiIgnore JwtToken token, @PathVariable KeyType keyType)
@@ -39,12 +41,10 @@ public class TierTableController
     );
   }
 
-  /**
-   * Top 50개 조회
-   */
+  @Operation(summary = "Required = [Token, authority.REGULAR] 최고 포인트 50개 기록 조회")
   @RequestMapping(method = RequestMethod.GET, value="/list/{keyType}")
   @RequiredToken
-  public ResponseEntity<CommonResponse<?>> tierListGet(@ApiIgnore JwtToken token, @PathVariable KeyType keyType)
+  public ResponseEntity<CommonResponse<List<Tier>>> tierListGet(@ApiIgnore JwtToken token, @PathVariable KeyType keyType)
   {
     final String userId = tokenProvider.getIdFromToken(token);
 
