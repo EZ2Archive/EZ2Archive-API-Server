@@ -1,10 +1,8 @@
 package com.ez2db.controller;
 
-import com.ez2db.common.aspect.RequiredAuthority;
 import com.ez2db.common.exception.business.ResourceNotFoundException;
 import com.ez2db.common.response.CommonResponse;
 import com.ez2db.entity.File;
-import com.ez2db.entity.MemberAuthority;
 import com.ez2db.service.FileService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -52,10 +50,10 @@ public class CommonFileController
     );
   }
 
-  @Operation(summary = "(Dev Only) Required = [Token, authority.ADMIN] 파일 전체목록 조회")
+  @ApiIgnore
+  @Operation(summary = "Dev Only) 파일 전체목록 조회")
   @RequestMapping(method = RequestMethod.GET, value = "/list")
   @ResponseBody
-  @RequiredAuthority(authority = MemberAuthority.ADMIN)
   public ResponseEntity<CommonResponse<List<String>>> listGet()
   {
     List<File> fileList = fileService.getAllFiles();
