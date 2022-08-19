@@ -29,7 +29,7 @@ public class AchievementController
 
   private final TokenProvider<String, JwtToken> tokenProvider;
 
-  @Operation(summary = "[T] 성과표 목록 조회")
+  @Operation(summary = "Required = [Token, authority.REGULAR] 성과표 목록 조회")
   @RequestMapping(method = RequestMethod.GET, value = "/list/{keyType}/{level}")
   @RequiredToken
   public ResponseEntity<CommonResponse<List<AchieveVO>>> achievementListGet(@ApiIgnore JwtToken token, @PathVariable KeyType keyType, @PathVariable int level)
@@ -43,7 +43,7 @@ public class AchievementController
     );
   }
 
-  @Operation(summary = "[T] 성과표 종합 조회")
+  @Operation(summary = "Required = [Token, authority.REGULAR] 성과표 종합 조회")
   @RequestMapping(method = RequestMethod.GET, value = "/overall/{keyType}/{level}")
   @RequiredToken
   public ResponseEntity<CommonResponse<OverallVO>> achievementOverallGet(@ApiIgnore JwtToken token, @PathVariable KeyType keyType, @PathVariable int level)
@@ -57,7 +57,7 @@ public class AchievementController
     );
   }
 
-  @Operation(summary = "[T] 성과표 점수 히스토리 조회")
+  @Operation(summary = "Required = [Token, authority.REGULAR] 성과표 점수 히스토리 조회")
   @RequestMapping(method = RequestMethod.GET, value="/history/{musicInfoId}")
   @RequiredToken
   public ResponseEntity<CommonResponse<List<RecordDetail>>> achievementHistoryGet(@ApiIgnore JwtToken token, @PathVariable Long musicInfoId)
@@ -71,7 +71,7 @@ public class AchievementController
     );
   }
 
-  @Operation(summary = "[T] 성과표 점수 기록")
+  @Operation(summary = "Required = [Token, authority.REGULAR] 성과표 점수 기록 등록")
   @RequestMapping(method = RequestMethod.POST, value="/save")
   @RequiredToken
   public ResponseEntity<CommonResponse<?>> achievementSavePost(@ApiIgnore JwtToken token, @RequestBody RecordDetail recordDetail)
