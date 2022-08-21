@@ -48,7 +48,7 @@ public class LoginService
     member.setAddTime(LocalDateTime.now());
 
     // 사용자 필드 유효성 검사
-    if( !validator.isValid(member) ) throw new IllegalValueException("잘못된 사용자 양식의 요청입니다.");
+    if( !validator.isValidWithTrim(member) ) throw new IllegalValueException("잘못된 사용자 양식의 요청입니다.");
 
     repository.save(member);
   }

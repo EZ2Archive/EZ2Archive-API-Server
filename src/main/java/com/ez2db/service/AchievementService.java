@@ -76,7 +76,7 @@ public class AchievementService
     record.setRecordDetail(recordDetail);
     record.setAddTime(LocalDateTime.now());
 
-    if( !recordValidator.isValid(record) ) throw new IllegalValueException("잘못된 요청의 양식입니다.");
+    if( !recordValidator.isValidWithTrim(record) ) throw new IllegalValueException("잘못된 요청의 양식입니다.");
 
     Optional<Tier> findTier = tierRepository.findTierByMemberAndMusic(member, musicInfo);
 
