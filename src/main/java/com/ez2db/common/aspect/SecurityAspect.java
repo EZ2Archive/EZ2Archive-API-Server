@@ -83,6 +83,8 @@ public class SecurityAspect
 
     final JwtToken token = tokenProvider.getToken(request);
 
+    tokenProvider.isValid(token);
+
     final String userId = tokenProvider.getIdFromToken(token);
 
     final Member findMember = memberService.findByUserId(userId);
