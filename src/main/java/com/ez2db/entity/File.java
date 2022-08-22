@@ -1,8 +1,11 @@
 package com.ez2db.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,20 +29,26 @@ public class File
   private String fileUUID;
 
   @Column(nullable = false)
+  @ApiModelProperty(hidden = true)
   private String fileName;
 
   @Column(nullable = false)
+  @ApiModelProperty(hidden = true)
   private String fileOriginName;
 
   @Column(nullable = false)
+  @ApiModelProperty(hidden = true)
   private String contentType;
 
   @Column(nullable = false)
+  @ApiModelProperty(hidden = true)
   private long size;
 
   @Column(nullable = false)
   @JsonSerialize(using = LocalDateTimeSerializer.class)
+  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
   @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+  @ApiModelProperty(hidden = true)
   private LocalDateTime addTime;
 
   public File()
