@@ -44,9 +44,7 @@ public class CommonFileController
 
     // TODO --> created URI 생성
     return ResponseEntity.created(null).body(
-      CommonResponse.builder()
-        .message("success")
-        .build()
+      CommonResponse.success()
     );
   }
 
@@ -79,8 +77,6 @@ public class CommonFileController
   @RequestMapping(method = RequestMethod.GET, value = "/download/{fileUUID}")
   public ResponseEntity<Resource> downloadGet(@PathVariable String fileUUID) throws IOException
   {
-//    Resource resource = new UrlResource(Paths.get(FILE_PATH).resolve(fileUUID).toUri());
-
     final Resource resource;
     final File file = fileService.findByFileUUID(fileUUID);
 
