@@ -23,7 +23,7 @@ public interface Validator<T>
         try
         {
           String value = (String) field.get(t);
-          field.set(t, value.trim());
+          if( value != null ) field.set(t, value.trim());
         }
         catch ( IllegalAccessException e )
         {
