@@ -35,7 +35,7 @@ public class AchievementRepository
       ",      COALESCE(rd.GRADE, '') " +
       ",      COALESCE(rd.IS_ALL_COOL, FALSE) " +
       ",      COALESCE(rd.IS_NO_MISS, FALSE) " +
-      ",      (SELECT f.FILE_ORIGIN_NAME FROM FILE f WHERE mi.FILE_ID = f.FILE_ID) " +
+      ",      (SELECT f.FILEUUID FROM FILE f WHERE mi.FILE_ID = f.FILE_ID) " +
       "FROM MUSIC_INFO mi " +
       "  LEFT JOIN ( " +
       "    SELECT tr2.RECORD_DETAIL_ID, tr2.MUSIC_INFO_ID, tr2.MEMBER_ID, tr2.ADD_TIME " +

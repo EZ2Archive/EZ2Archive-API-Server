@@ -19,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
@@ -89,9 +90,11 @@ public class CommonFileController
       throw new ResourceNotFoundException("해당 파일을 찾을 수 없습니다: " + file.getFileName());
     }
 
+    String fileName = new String(file.getFileOriginName().getBytes(), StandardCharsets.ISO_8859_1);
+
     return ResponseEntity.ok()
       .headers(headers -> {
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=\"%s\"", file.getFileOriginName()));
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
         headers.add(HttpHeaders.CONTENT_TYPE, file.getContentType());
       })
       .body(resource);

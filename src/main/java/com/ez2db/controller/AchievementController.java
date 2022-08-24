@@ -80,7 +80,7 @@ public class AchievementController
 
     achievementService.saveAchievementRecord(userId, recordDetail);
 
-    return ResponseEntity.ok().body(
+    return ResponseEntity.created(null).body(
       CommonResponse.success()
     );
   }

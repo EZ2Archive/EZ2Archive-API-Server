@@ -30,11 +30,11 @@ public class AchieveVO
 
   private boolean isNoMiss;
 
-  private String imagePath;
+  private String fileUUID;
 
   public AchieveVO(){}
 
-  public AchieveVO(Long recordId, Long musicInfoId, String name, int score, Double percentage, int rank, String difficulty, String grade, boolean isAllCool, boolean isNoMiss, String imagePath)
+  public AchieveVO(Long recordId, Long musicInfoId, String name, int score, Double percentage, int rank, String difficulty, String grade, boolean isAllCool, boolean isNoMiss, String fileUUID)
   {
     this.recordId = recordId;
     this.musicInfoId = musicInfoId;
@@ -46,22 +46,23 @@ public class AchieveVO
     this.grade = grade;
     this.isAllCool = isAllCool;
     this.isNoMiss = isNoMiss;
-    this.imagePath = imagePath;
+    this.fileUUID = fileUUID;
   }
 
   /**
    * QLRM 전용 생성자 (H2)
    */
-  public AchieveVO(BigInteger recordId, BigInteger musicInfoId, String name, int score, Double percentage, int rank, String difficulty, String grade, boolean isAllCool, boolean isNoMiss, String imagePath)
+  public AchieveVO(BigInteger recordId, BigInteger musicInfoId, String name, int score, Double percentage, int rank, String difficulty, String grade, boolean isAllCool, boolean isNoMiss, String fileUUID)
   {
-    this(recordId.longValue(), musicInfoId.longValue(), name, score, percentage, rank, difficulty, grade, isAllCool, isNoMiss, imagePath);
+    this(recordId.longValue(), musicInfoId.longValue(), name, score, percentage, rank, difficulty, grade, isAllCool, isNoMiss, fileUUID);
   }
 
   /**
    * QLRM 전용 생성자 (MySQL)
    */
-  public AchieveVO(BigInteger recordId, BigInteger musicInfoId, String name, BigInteger score, Double percentage, int rank, String difficulty, String grade, BigDecimal isAllCool, BigDecimal isNoMiss, String imagePath)
+  public AchieveVO(BigInteger recordId, BigInteger musicInfoId, String name, BigInteger score, Float percentage, int rank, String difficulty, String grade, BigDecimal isAllCool, BigDecimal isNoMiss, String fileUUID)
   {
-    this(recordId.longValue(), musicInfoId.longValue(), name, score.intValue(), percentage, rank, difficulty, grade, isAllCool.intValue() > 0, isNoMiss.intValue() > 0, imagePath);
+    this(recordId.longValue(), musicInfoId.longValue(), name, score.intValue(), percentage.doubleValue(), rank, difficulty, grade, isAllCool.intValue() > 0, isNoMiss.intValue() > 0, fileUUID);
   }
+
 }
