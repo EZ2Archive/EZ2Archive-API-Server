@@ -1,4 +1,4 @@
-# EZ2DB
+# EZ2Achieve
 
 - EZ2ON Achievement System Web API Server (2022.08.07)
 
