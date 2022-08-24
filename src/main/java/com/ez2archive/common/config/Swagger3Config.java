@@ -19,7 +19,7 @@ import java.util.List;
 @EnableWebMvc
 public class Swagger3Config
 {
-  private static final String BASE_PACKAGE = "com.ez2achieve.controller";
+  private static final String BASE_PACKAGE = "com.ez2archive.controller";
 
   @Bean
   public Docket api()
