@@ -1,8 +1,8 @@
 package com.ez2archive.common.config;
 
+import com.ez2archive.common.auth.JwtToken;
 import com.ez2archive.common.auth.JwtTokenProvider;
 import com.ez2archive.common.auth.TokenProvider;
-import com.ez2archive.common.auth.JwtToken;
 import com.ez2archive.common.crypt.DefaultPasswordCryptor;
 import com.ez2archive.common.handler.crypt.PasswordCryptHandler;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +16,7 @@ import java.security.SecureRandom;
 @PropertySource("classpath:security.properties")
 public class SecurityConfig
 {
-  @Value("${ez2db.security.password.algorithm}")
+  @Value("${ez2archive.security.password.algorithm}")
   private String PASSWORD_ALGORITHM;
 
   @Bean

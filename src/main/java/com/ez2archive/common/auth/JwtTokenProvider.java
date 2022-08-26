@@ -12,7 +12,7 @@ import java.util.Date;
 
 public class JwtTokenProvider implements TokenProvider<String, JwtToken>
 {
-  @Value("${ez2db.security.jwt.secret-key}")
+  @Value("${ez2archive.security.jwt.secret-key}")
   private String SECRET_KEY;
 
   public static final String AUTH_IDENTIFIER = "Authorization";
