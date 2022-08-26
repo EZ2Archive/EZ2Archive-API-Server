@@ -1,30 +1,10 @@
 package com.ez2archive.controller;
 
-import com.ez2archive.common.exception.business.ResourceNotFoundException;
-import com.ez2archive.common.response.CommonResponse;
-import com.ez2archive.entity.File;
-import com.ez2archive.service.FileService;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.bind.annotation.RequestMapping;
 import springfox.documentation.annotations.ApiIgnore;
-
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @Controller
@@ -33,9 +13,14 @@ import java.util.List;
 @ApiIgnore
 public class CommonFileController
 {
+  /**
+   * 2022.08.24 이미지 파일 업로드/다운로드 없이 프론트-엔드에서 이미지를 정적으로 처리하기로 결정.
+   */
+  /*
   @Value("${spring.servlet.multipart.location}")
   private String FILE_PATH;
   private final FileService fileService;
+
 
   @Operation(summary = "파일 업로드")
   @RequestMapping(method = RequestMethod.POST, value = "/upload")
@@ -99,4 +84,5 @@ public class CommonFileController
       })
       .body(resource);
   }
+  */
 }

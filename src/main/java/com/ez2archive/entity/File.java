@@ -16,7 +16,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
+/**
+ * 2022.08.24 이미지 파일 업로드/다운로드 없이 프론트-엔드에서 이미지를 정적으로 처리하기로 결정.
+ */
+
 @SuppressWarnings("unused")
+@Deprecated
 @Entity
 @Getter @Setter
 public class File
@@ -66,3 +71,4 @@ public class File
     this.addTime = addTime;
   }
 }
+
