@@ -3,6 +3,7 @@ package com.ez2archive.service;
 import com.ez2archive.common.auth.JwtToken;
 import com.ez2archive.common.auth.TokenProvider;
 import com.ez2archive.common.exception.auth.AuthenticationException;
+import com.ez2archive.common.exception.business.DuplicateUniqueValueException;
 import com.ez2archive.common.exception.business.IllegalValueException;
 import com.ez2archive.common.handler.crypt.PasswordCryptHandler;
 import com.ez2archive.common.validator.Validator;
@@ -23,12 +24,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class LoginService
 {
-  private final MemberRepository repository;
-  private final LoginHistoryRepository historyRepository;
+  private final MemberRepository memberRepository;
+  private final LoginHistoryRepository loginHistoryRepository;
 
-  private final Validator<Member> validator;
+  private final Validator<Member> memberValidator;
 
-  private final PasswordCryptHandler pwdHandler;
+  private final PasswordCryptHandler passwordCryptHandler;
 
   private final TokenProvider<String, JwtToken> tokenProvider;
 
@@ -38,19 +39,19 @@ public class LoginService
   {
     final long salt =  sr.nextLong();
 
-    Optional<Member> findMember = repository.findByUserId(member.getUserId());
+    Optional<Member> findMember = memberRepository.findByUserId(member.getUserId());
 
-    if(findMember.isPresent()) throw new AuthenticationException("이미 존재하는 사용자입니다.");
+    if(findMember.isPresent()) throw new DuplicateUniqueValueException("이미 존재하는 사용자입니다.");
 
-    member.setPassword( pwdHandler.encode(member.getPassword(), salt) );
+    member.setPassword( passwordCryptHandler.encode(member.getPassword(), salt) );
     member.setSalt(salt);
     member.setAuthority(MemberAuthority.REGULAR);
     member.setAddTime(LocalDateTime.now());
 
     // 사용자 필드 유효성 검사
-    if( !validator.isValidWithTrim(member) ) throw new IllegalValueException("잘못된 사용자 양식의 요청입니다.");
+    if( !memberValidator.isValidWithTrim(member) ) throw new IllegalValueException("잘못된 사용자 양식의 요청입니다.");
 
-    repository.save(member);
+    memberRepository.save(member);
   }
 
   public JwtToken login(HttpServletRequest request, String userId, String password)
@@ -61,14 +62,14 @@ public class LoginService
 
     try
     {
-      Optional<Member> findMember = repository.findByUserId(userId);
+      Optional<Member> findMember = memberRepository.findByUserId(userId);
 
-      if( findMember.isEmpty() ) throw new AuthenticationException("사용자 아이디가 존재하지 않습니다.");
+      if( findMember.isEmpty() ) throw new AuthenticationException("사용자 아이디 혹은 패스워드가 일치하지 않습니다.");
 
       final String realPwd  = findMember.get().getPassword();
       final Long   salt     = findMember.get().getSalt();
 
-      if( !realPwd.equals(pwdHandler.encode(password, salt)) ) throw new AuthenticationException("사용자 패스워드가 일치하지 않습니다.");
+      if( !realPwd.equals(passwordCryptHandler.encode(password, salt)) ) throw new AuthenticationException("사용자 아이디 혹은 패스워드가 일치하지 않습니다.");
 
       jwtToken = tokenProvider.issue(userId);
 
@@ -83,7 +84,7 @@ public class LoginService
       loginHistory.setSucceed(isSucceed);
       loginHistory.setAddTime(LocalDateTime.now());
 
-      historyRepository.save(loginHistory);
+      loginHistoryRepository.save(loginHistory);
     }
 
     return jwtToken;
@@ -91,8 +92,11 @@ public class LoginService
 
   public boolean isExistUserId(String userId)
   {
-    Optional<Member> findMember = repository.findByUserId(userId);
+    Optional<Member> findMember = memberRepository.findByUserId(userId);
 
     return findMember.isPresent();
   }
+
+
+
 }
