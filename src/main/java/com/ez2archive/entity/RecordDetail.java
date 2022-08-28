@@ -10,7 +10,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -51,7 +50,7 @@ public class RecordDetail
   @ApiModelProperty(hidden = true)
   private LocalDateTime addTime;
   
-  @OneToMany(mappedBy = "recordDetail")
+  @OneToOne(mappedBy = "recordDetail")
   @JsonIgnore
-  private List<Record> recordList;
+  private Record record;
 }

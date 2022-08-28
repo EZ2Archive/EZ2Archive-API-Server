@@ -31,7 +31,7 @@ public class Record
   @JoinColumn(name = "member_id", nullable = false)
   private Member member;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "record_detail_id", nullable = false)
   private RecordDetail recordDetail;
 
