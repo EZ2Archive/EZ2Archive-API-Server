@@ -1,6 +1,7 @@
 package com.ez2archive.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.swagger.annotations.ApiModelProperty;
@@ -47,6 +48,12 @@ public class Member
   @Enumerated(EnumType.STRING)
   @ApiModelProperty(hidden = true)
   private MemberAuthority authority;
+
+  /** 이메일 */
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "email_id")
+  @JsonIgnore
+  private Email email;
 
   @OneToMany(mappedBy = "member")
   @ApiModelProperty(hidden = true)
