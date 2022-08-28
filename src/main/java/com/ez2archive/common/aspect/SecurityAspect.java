@@ -95,7 +95,7 @@ public class SecurityAspect
       .getAnnotation(RequiredAuthority.class)
       .authority();
 
-    if( authority != findMember.getAuthority() ) throw new AuthorizationException("해당 요청을 수행하기 위한 권한이 충분하지 않습니다.");
+    if( authority != findMember.getAuthority() && authority != MemberAuthority.ADMIN ) throw new AuthorizationException("해당 요청을 수행하기 위한 권한이 충분하지 않습니다.");
 
     return joinPoint.proceed(joinPoint.getArgs());
   }
