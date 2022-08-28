@@ -14,6 +14,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
+@Deprecated
 @Service
 @RequiredArgsConstructor
 public class FileService
