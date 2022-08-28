@@ -56,9 +56,7 @@ public class VerifyService
     mailSender.send(mimeMessage -> {
       mimeMessage.addRecipients(Message.RecipientType.TO, address);
       mimeMessage.setSubject("[EZ2Archive] Please verify your email");
-      mimeMessage.setText(
-        "아래의 링크를 클릭하여 인증을 완료하세요.\n" + uri
-      );
+      mimeMessage.setText("아래의 링크를 클릭하여 인증을 완료하세요.\n" + uri);
     });
 
     emailRepository.save(findEmail);
