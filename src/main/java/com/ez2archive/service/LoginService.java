@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -39,9 +38,8 @@ public class LoginService
   {
     final long salt =  sr.nextLong();
 
-    Optional<Member> findMember = memberRepository.findByUserId(member.getUserId());
-
-    if(findMember.isPresent()) throw new DuplicateUniqueValueException("이미 존재하는 사용자입니다.");
+    memberRepository.findByUserId(member.getUserId())
+      .orElseThrow( () -> new DuplicateUniqueValueException("이미 존재하는 사용자입니다.") );
 
     member.setPassword( passwordCryptHandler.encode(member.getPassword(), salt) );
     member.setSalt(salt);
@@ -52,6 +50,7 @@ public class LoginService
     if( !memberValidator.isValidWithTrim(member) ) throw new IllegalValueException("잘못된 사용자 양식의 요청입니다.");
 
     memberRepository.save(member);
+
   }
 
   public JwtToken login(HttpServletRequest request, String userId, String password)
@@ -62,12 +61,11 @@ public class LoginService
 
     try
     {
-      Optional<Member> findMember = memberRepository.findByUserId(userId);
+      Member findMember = memberRepository.findByUserId(userId)
+        .orElseThrow( () -> new AuthenticationException("사용자 아이디 혹은 패스워드가 일치하지 않습니다.") );
 
-      if( findMember.isEmpty() ) throw new AuthenticationException("사용자 아이디 혹은 패스워드가 일치하지 않습니다.");
-
-      final String realPwd  = findMember.get().getPassword();
-      final Long   salt     = findMember.get().getSalt();
+      final String realPwd  = findMember.getPassword();
+      final Long   salt     = findMember.getSalt();
 
       if( !realPwd.equals(passwordCryptHandler.encode(password, salt)) ) throw new AuthenticationException("사용자 아이디 혹은 패스워드가 일치하지 않습니다.");
 
@@ -92,11 +90,7 @@ public class LoginService
 
   public boolean isExistUserId(String userId)
   {
-    Optional<Member> findMember = memberRepository.findByUserId(userId);
-
-    return findMember.isPresent();
+    return memberRepository.findByUserId(userId).isPresent();
   }
-
-
 
 }
