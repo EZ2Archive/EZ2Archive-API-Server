@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,11 +25,8 @@ public class NoticeService
 
   public Notice findNoticeById(Long id)
   {
-    Optional<Notice> findNotice = noticeRepository.findById(id);
-
-    if ( findNotice.isEmpty() ) throw new ResourceNotFoundException("공지 정보가 존재하지 않습니다.");
-
-    return findNotice.get();
+    return noticeRepository.findById(id)
+      .orElseThrow( () -> new ResourceNotFoundException("공지 정보가 존재하지 않습니다.") );
   }
 
   @Transactional
