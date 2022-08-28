@@ -2,6 +2,7 @@ package com.ez2archive.service;
 
 import com.ez2archive.common.exception.business.ResourceNotFoundException;
 import com.ez2archive.entity.Notice;
+import com.ez2archive.repository.NoticeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

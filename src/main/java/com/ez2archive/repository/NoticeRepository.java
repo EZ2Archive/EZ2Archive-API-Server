@@ -1,4 +1,4 @@
-package com.ez2archive.service;
+package com.ez2archive.repository;
 
 import com.ez2archive.entity.Notice;
 import org.springframework.data.domain.Page;
