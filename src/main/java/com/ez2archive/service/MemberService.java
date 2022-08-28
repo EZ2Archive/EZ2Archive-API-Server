@@ -6,8 +6,6 @@ import com.ez2archive.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class MemberService
@@ -16,10 +14,7 @@ public class MemberService
 
   public Member findByUserId(String userId)
   {
-    Optional<Member> findMember = memberRepository.findByUserId(userId);
-
-    if( findMember.isEmpty() ) throw new ResourceNotFoundException(userId + " 사용자를 찾을 수 없습니다.");
-
-    return findMember.get();
+    return memberRepository.findByUserId(userId)
+      .orElseThrow( () -> new ResourceNotFoundException(userId + " 사용자를 찾을 수 없습니다.") );
   }
 }
