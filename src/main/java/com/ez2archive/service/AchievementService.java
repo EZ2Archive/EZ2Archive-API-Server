@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -57,48 +56,37 @@ public class AchievementService
   @Transactional
   public void saveAchievementRecord(String userId, RecordDetail recordDetail)
   {
-    Optional<Member> findMember = memberRepository.findByUserId(userId);
+    Member findMember = memberRepository.findByUserId(userId)
+      .orElseThrow( () -> new ResourceNotFoundException("사용자 정보가 존재하지 않습니다.") );
 
-    if( findMember.isEmpty() ) throw new ResourceNotFoundException("사용자 정보가 존재하지 않습니다.");
-
-    Optional<MusicInfo> findMusicInfo = musicInfoRepository.findById(recordDetail.getMusicInfoId());
-
-    if( findMusicInfo.isEmpty() ) throw new ResourceNotFoundException("음원 정보가 존재하지 않습니다.");
-
-    final Member    member    = findMember.get();
-    final MusicInfo musicInfo = findMusicInfo.get();
+    MusicInfo findMusicInfo = musicInfoRepository.findById(recordDetail.getMusicInfoId())
+      .orElseThrow( () -> new ResourceNotFoundException("음원 정보가 존재하지 않습니다.") );
 
     final Record record = new Record();
-    record.setMember(findMember.get());
-    record.setMusic(musicInfo);
-    recordDetail.setPercentage( Math.round(((float)recordDetail.getScore() / musicInfo.getBestScore() * 100f) * 1000f) / 1000f );
+    record.setMember(findMember);
+    record.setMusic(findMusicInfo);
+    recordDetail.setPercentage( Math.round(((float)recordDetail.getScore() / findMusicInfo.getBestScore() * 100f) * 1000f) / 1000f );
     recordDetail.setAddTime(LocalDateTime.now());
     record.setRecordDetail(recordDetail);
     record.setAddTime(LocalDateTime.now());
 
     if( !recordValidator.isValidWithTrim(record) ) throw new IllegalValueException("잘못된 요청의 양식입니다.");
 
-    Optional<Tier> findTier = tierRepository.findTierByMemberAndMusic(member, musicInfo);
+    Tier findTier = tierRepository.findTierByMemberAndMusic(findMember, findMusicInfo)
+      .orElseGet(() -> {
+        Tier tier = new Tier();
+        tier.setMusic(findMusicInfo);
+        tier.setAddTime(LocalDateTime.now());
+        tier.setLastUpdateTime(LocalDateTime.now());
+        return tier;
+      });
 
-    final Tier tier;
+    findTier.setLastUpdateTime(LocalDateTime.now());
+    findTier.setScore(recordDetail.getScore());
+    findTier.setMember(findMember);
+    findTier.setPoint(tierHandler.getPointAsScore( findMusicInfo.getKeyType(), findMusicInfo.getBestScore(), findMusicInfo.getLevel(), recordDetail.getScore() ));
 
-    if( findTier.isEmpty() )
-    {
-      tier = new Tier();
-      tier.setMusic(musicInfo);
-      tier.setAddTime(LocalDateTime.now());
-      tier.setLastUpdateTime(LocalDateTime.now());
-    }
-    else
-    {
-      tier = findTier.get();
-      tier.setLastUpdateTime(LocalDateTime.now());
-    }
-    tier.setScore(recordDetail.getScore());
-    tier.setMember(member);
-    tier.setPoint(tierHandler.getPointAsScore( musicInfo.getKeyType(), musicInfo.getBestScore(), musicInfo.getLevel(), recordDetail.getScore() ));
-
-    tierRepository.save(tier);
+    tierRepository.save(findTier);
     recordRepository.save(record);
   }
 
