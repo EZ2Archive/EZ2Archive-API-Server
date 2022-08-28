@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -32,11 +31,8 @@ public class MusicInfoService
 
   public MusicInfo findById(Long id)
   {
-    Optional<MusicInfo> findMusicInfo = musicInfoRepository.findById(id);
-
-    if( findMusicInfo.isEmpty() ) throw new ResourceNotFoundException("음원 정보가 존재하지 않습니다.");
-
-    return findMusicInfo.get();
+    return musicInfoRepository.findById(id)
+      .orElseThrow( () -> new ResourceNotFoundException("음원 정보가 존재하지 않습니다.") );
   }
 
   public Page<MusicInfo> findByKeyTypeAndNameContaining(KeyType keyType, String keyword, Pageable pageable)
