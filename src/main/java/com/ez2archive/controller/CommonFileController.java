@@ -29,7 +29,6 @@ public class CommonFileController
   {
     fileService.saveAll(multipartFiles);
 
-    // TODO --> created URI 생성
     return ResponseEntity.created(null).body(
       CommonResponse.success()
     );
