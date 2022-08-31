@@ -33,10 +33,6 @@ public class Record
   private Member member;
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  @JoinColumn(name = "tier_point_id")
-  private TierPoint tierPoint;
-
-  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "record_detail_id", nullable = false)
   private RecordDetail recordDetail;
 

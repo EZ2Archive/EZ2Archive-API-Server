@@ -31,7 +31,7 @@ public class AchievementRepository
     nativeQuery.append(",      mi.NAME ");
     nativeQuery.append(",      COALESCE(rd.SCORE, -1) ");
     nativeQuery.append(",      -1  as avgScore ");
-    nativeQuery.append(",      COALESCE(tp.point, -1) ");
+    nativeQuery.append(",      COALESCE(rd.point, -1) ");
     nativeQuery.append(",      -1  as avgPoint ");
     nativeQuery.append(",      COALESCE(rd.PERCENTAGE, -1) ");
     nativeQuery.append(",      mi.RANKS ");
@@ -56,7 +56,6 @@ public class AchievementRepository
     nativeQuery.append("    LEFT JOIN RECORD tr2 ON tr2.MUSIC_INFO_ID = tr.MUSIC_INFO_ID AND tr2.ADD_TIME = tr.ADD_TIME AND tr2.MEMBER_ID = tr.MEMBER_ID ");
     nativeQuery.append("  ) r ON mi.MUSIC_INFO_ID = r.MUSIC_INFO_ID   ");
     nativeQuery.append("  LEFT JOIN RECORD_DETAIL rd ON rd.RECORD_DETAIL_ID = r.RECORD_DETAIL_ID ");
-    nativeQuery.append("  LEFT JOIN TIER_POINT tp ON tp.tier_point_id = r.tier_point_id ");
     nativeQuery.append("WHERE mi.KEY_TYPE = :keyType ");
     nativeQuery.append("AND   mi.LEVEL = :level ");
     nativeQuery.append("ORDER BY mi.RANKS DESC, mi.NAME ");

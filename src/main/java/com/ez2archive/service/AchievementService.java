@@ -5,18 +5,18 @@ import com.ez2archive.common.exception.business.ResourceNotFoundException;
 import com.ez2archive.common.validator.Validator;
 import com.ez2archive.dto.achieve.AchieveDTO;
 import com.ez2archive.dto.achieve.OverallDTO;
+import com.ez2archive.dto.tier.RecordDetailDTO;
 import com.ez2archive.dto.tier.TierAverageDTO;
-import com.ez2archive.dto.tier.TierPointMaxDTO;
 import com.ez2archive.entity.*;
 import com.ez2archive.handler.TierHandler;
 import com.ez2archive.repository.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,8 +28,8 @@ public class AchievementService
   private final RecordRepository recordRepository;
   private final RecordDetailRepository recordDetailRepository;
   private final TierRepository tierRepository;
-  private final TierPointRepository tierPointRepository;
   private final MemberRepository memberRepository;
+  private final DTORepository dtoRepository;
 
   private final Validator<RecordDetail> recordDetailValidator;
 
@@ -49,7 +49,7 @@ public class AchievementService
 
     List<TierGrade> tierGradeList = TierGrade.ofGroup(tier.getTierGrade());
 
-    List<TierAverageDTO> tierAvgList = recordRepository.findAvgRecordByMusicInTierGradeAndKeyType(tierGradeList, keyType, level);
+    List<TierAverageDTO> tierAvgList = dtoRepository.findAvgRecordByMusicInTierGradeAndKeyType(tierGradeList, keyType, level);
     List<AchieveDTO> achieveList = achieveRepository.findAchieveListByUserIdWithKeyTypeWithLevel(userId, keyType, level);
     achieveList.forEach(achieve -> {
         for ( TierAverageDTO tierAvg : tierAvgList )
@@ -78,7 +78,16 @@ public class AchievementService
 
   public List<RecordDetail> findAchievementHistory(String userId, Long musicInfoId)
   {
-    return recordDetailRepository.findRecordDetailsByUserIdAndMusicInfoId(userId, musicInfoId);
+    Member findMember = memberRepository.findByUserId(userId)
+      .orElseThrow( () -> new ResourceNotFoundException("사용자 정보가 존재하지 않습니다.") );
+
+    MusicInfo findMusicInfo = musicInfoRepository.findById(musicInfoId)
+      .orElseThrow( () -> new ResourceNotFoundException("음원 정보가 존재하지 않습니다.") );
+
+    return recordRepository.findRecordsByMemberAndMusic(findMember, findMusicInfo)
+      .stream()
+      .map(Record::getRecordDetail)
+      .collect(Collectors.toList());
   }
 
   @Transactional
@@ -96,6 +105,7 @@ public class AchievementService
     recordDetail.setPercentage( Math.round(((float)recordDetail.getScore() / findMusicInfo.getBestScore() * 100f) * 1000f) / 1000f );
     recordDetail.setAddTime(LocalDateTime.now());
     recordDetail.setGrade( Grade.of(recordDetail.getScore()) );
+    recordDetail.setPoint( tierHandler.getPointAsScore(keyType, findMusicInfo.getBestScore(), findMusicInfo.getLevel(), recordDetail.getScore()) );
 
     Record findBeforeRecord = recordRepository.findTopByMemberAndMusicOrderByAddTimeDesc(findMember, findMusicInfo)
       .orElseGet( Record::new );
@@ -114,16 +124,8 @@ public class AchievementService
           findBeforeRecord.getRecordDetail().getScore() >= recordDetail.getScore() ) )
       throw new IllegalValueException("잘못된 요청의 양식입니다.");
 
-    TierPoint tierPoint = TierPoint.builder()
-      .music(findMusicInfo)
-      .member(findMember)
-      .addTime(LocalDateTime.now())
-      .point( tierHandler.getPointAsScore(keyType, findMusicInfo.getBestScore(), findMusicInfo.getLevel(), recordDetail.getScore()) )
-      .build();
-    record.setTierPoint(tierPoint);
 
     recordRepository.save(record);
-    tierPointRepository.save(tierPoint);
 
     // totalPoint = 사용자, 키타입으로 그룹핑한 티어포인트들 중 최고점수 50개의 합
     this.updateTier(findMember, keyType);
@@ -155,9 +157,9 @@ public class AchievementService
    */
   private void updateTier(Member member, KeyType keyType) throws IllegalStateException
   {
-    final double totalPoint = tierPointRepository.findMaxPointsByMemberOrderByPointDesc(member, keyType, Pageable.ofSize(50).first())
+    final double totalPoint = dtoRepository.findTop50RecordDetailDTOsByMemberAndKeyType(member, keyType)
       .stream()
-      .map(TierPointMaxDTO::getMaxPoint)
+      .map(RecordDetailDTO::getPoint)
       .reduce(Double::sum)
       .orElseThrow(IllegalStateException::new);
     final double changePoint = tierHandler.getChangePoint(keyType, totalPoint);
