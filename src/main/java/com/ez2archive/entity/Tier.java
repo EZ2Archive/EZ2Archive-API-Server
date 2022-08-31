@@ -1,9 +1,7 @@
 package com.ez2archive.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,30 +12,52 @@ import java.time.LocalDateTime;
 @Getter @Setter
 public class Tier
 {
-  @Id @GeneratedValue
+  @Id
+  @GeneratedValue
   @Column(name = "tier_id")
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "music_info_id", nullable = false)
-  private MusicInfo music;
-
-  @JsonIgnore
-  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_id", nullable = false)
   private Member member;
 
-  private int score;
-
-  private double point;
+  @Column(nullable = false)
+  @Enumerated(EnumType.STRING)
+  private KeyType keyType;
 
   @Column(nullable = false)
-  @JsonSerialize(using = LocalDateTimeSerializer.class)
-  @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+  @Enumerated(EnumType.STRING)
+  private TierGrade tierGrade;
+
+  private double totalPoint;
+
+  private double changePoint;
+
+  private double untilNextTier;
+
+  @Column(nullable = false)
+  @JsonIgnore
   private LocalDateTime addTime;
 
   @Column(nullable = false)
-  @JsonSerialize(using = LocalDateTimeSerializer.class)
-  @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
-  private LocalDateTime lastUpdateTime;
+  @JsonIgnore
+  private LocalDateTime lastModifyTime;
+
+  public Tier()
+  {
+  }
+
+  @Builder
+  public Tier(Long id, Member member, KeyType keyType, TierGrade tierGrade, double totalPoint, double changePoint, double untilNextTier, LocalDateTime addTime, LocalDateTime lastModifyTime)
+  {
+    this.id = id;
+    this.member = member;
+    this.keyType = keyType;
+    this.tierGrade = tierGrade;
+    this.totalPoint = totalPoint;
+    this.changePoint = changePoint;
+    this.untilNextTier = untilNextTier;
+    this.addTime = addTime;
+    this.lastModifyTime = lastModifyTime;
+  }
 }

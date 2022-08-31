@@ -24,8 +24,18 @@ public enum Grade
     this.score = score;
   }
 
-  public int getScore()
+  public int score()
   {
     return score;
+  }
+
+  public static Grade of(int score)
+  {
+    for ( Grade grade : Grade.values() )
+    {
+      if( score >= grade.score() )
+        return grade;
+    }
+    return Grade.F;
   }
 }

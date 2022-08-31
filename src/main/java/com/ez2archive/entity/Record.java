@@ -3,6 +3,7 @@ package com.ez2archive.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,4 +41,17 @@ public class Record
   @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
   private LocalDateTime addTime;
 
+  public Record()
+  {
+  }
+
+  @Builder
+  public Record(Long id, MusicInfo music, Member member, RecordDetail recordDetail, LocalDateTime addTime)
+  {
+    this.id = id;
+    this.music = music;
+    this.member = member;
+    this.recordDetail = recordDetail;
+    this.addTime = addTime;
+  }
 }

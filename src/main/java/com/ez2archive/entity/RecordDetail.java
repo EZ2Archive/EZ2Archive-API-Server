@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -35,6 +36,10 @@ public class RecordDetail
   /** 스코어 */
   private int score;
 
+  /** 티어 포인트 */
+  @ApiModelProperty(hidden = true)
+  private double point;
+
   /** 정확도 */
   @ApiModelProperty(hidden = true)
   private float percentage;
@@ -42,6 +47,7 @@ public class RecordDetail
   /** 등급(S+++, S+, A+, B) */
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
+  @ApiModelProperty(hidden = true)
   private Grade grade;
 
   @Column(nullable = false)
@@ -53,4 +59,23 @@ public class RecordDetail
   @OneToOne(mappedBy = "recordDetail")
   @JsonIgnore
   private Record record;
+
+  public RecordDetail()
+  {
+  }
+
+  @Builder
+  public RecordDetail(Long id, Long musicInfoId, boolean isNoMiss, boolean isAllCool, int score, double point, float percentage, Grade grade, LocalDateTime addTime, Record record)
+  {
+    this.id = id;
+    this.musicInfoId = musicInfoId;
+    this.isNoMiss = isNoMiss;
+    this.isAllCool = isAllCool;
+    this.score = score;
+    this.point = point;
+    this.percentage = percentage;
+    this.grade = grade;
+    this.addTime = addTime;
+    this.record = record;
+  }
 }

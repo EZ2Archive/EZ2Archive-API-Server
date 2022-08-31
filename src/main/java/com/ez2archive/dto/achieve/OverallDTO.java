@@ -1,4 +1,4 @@
-package com.ez2archive.vo;
+package com.ez2archive.dto.achieve;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +8,7 @@ import java.math.BigInteger;
 
 @SuppressWarnings("unused")
 @Getter @Setter
-public class OverallVO
+public class OverallDTO
 {
   /** 정확도 평균값 */
   private double rateAvg;
@@ -31,9 +31,9 @@ public class OverallVO
   /** S+ 갯수 */
   private int spCnt;
 
-  public OverallVO(){}
+  public OverallDTO(){}
 
-  public OverallVO(double rateAvg, long totalCnt, int allCoolCnt, int noMissCnt, int spppCnt, int sppCnt, int spCnt)
+  public OverallDTO(double rateAvg, long totalCnt, int allCoolCnt, int noMissCnt, int spppCnt, int sppCnt, int spCnt)
   {
     this.rateAvg = rateAvg;
     this.totalCnt = totalCnt;
@@ -47,7 +47,7 @@ public class OverallVO
   /**
    * QLRM 전용 생성자
    */
-  public OverallVO(BigDecimal rateAvg, Integer totalCnt, BigInteger allCoolCnt, BigInteger noMissCnt, BigInteger spppCnt, BigInteger sppCnt, BigInteger spCnt)
+  public OverallDTO(BigDecimal rateAvg, Integer totalCnt, BigInteger allCoolCnt, BigInteger noMissCnt, BigInteger spppCnt, BigInteger sppCnt, BigInteger spCnt)
   {
     this(rateAvg.doubleValue(), totalCnt.longValue(), allCoolCnt.intValue(), noMissCnt.intValue(), spppCnt.intValue(), sppCnt.intValue(), spCnt.intValue());
   }
@@ -55,7 +55,7 @@ public class OverallVO
   /**
    * QLRM 전용 생성자 (MySQL)
    */
-  public OverallVO(Double rateAvg, BigInteger totalCnt, BigDecimal allCoolCnt, BigDecimal noMissCnt, BigDecimal spppCnt, BigDecimal sppCnt, BigDecimal spCnt)
+  public OverallDTO(Double rateAvg, BigInteger totalCnt, BigDecimal allCoolCnt, BigDecimal noMissCnt, BigDecimal spppCnt, BigDecimal sppCnt, BigDecimal spCnt)
   {
     this(rateAvg, totalCnt.longValue(), allCoolCnt.intValue(), noMissCnt.intValue(), spppCnt.intValue(), sppCnt.intValue(), spCnt.intValue());
   }

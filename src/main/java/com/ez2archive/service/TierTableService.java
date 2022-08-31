@@ -1,14 +1,15 @@
 package com.ez2archive.service;
 
 import com.ez2archive.common.exception.business.ResourceNotFoundException;
+import com.ez2archive.dto.tier.RecordDetailDTO;
+import com.ez2archive.dto.tier.TierInfoDTO;
 import com.ez2archive.entity.KeyType;
 import com.ez2archive.entity.Member;
 import com.ez2archive.entity.Tier;
 import com.ez2archive.entity.TierGrade;
-import com.ez2archive.handler.TierHandler;
+import com.ez2archive.repository.DTORepository;
 import com.ez2archive.repository.MemberRepository;
 import com.ez2archive.repository.TierRepository;
-import com.ez2archive.vo.TierInfoVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,33 +21,33 @@ public class TierTableService
 {
   private final MemberRepository memberRepository;
   private final TierRepository tierRepository;
+  private final DTORepository dtoRepository;
 
-  private final TierHandler<TierGrade> tierHandler;
-
-  public TierInfoVO getTierByUserIdAndKeyType(String userId, KeyType keyType)
+  public TierInfoDTO findTierInfo(String userId, KeyType keyType)
   {
     Member findMember = memberRepository.findByUserId(userId)
       .orElseThrow( () -> new ResourceNotFoundException("사용자 정보가 존재하지 않습니다.") );
 
-    double totalPoint = tierRepository.findSumPointByMemberAndKeyType(findMember, keyType)
-      .orElse(0d);
+    Tier tier = tierRepository.findTierByMemberAndKeyType(findMember, keyType)
+      .orElseGet( () ->
+        Tier.builder()
+          .member(findMember)
+          .keyType(keyType)
+          .tierGrade(TierGrade.BEGINNER2)
+          .totalPoint(0d)
+          .changePoint(0d)
+          .untilNextTier(TierGrade.BEGINNER1.score())
+          .build()
+      );
 
-    final double changePoint = tierHandler.getChangePoint(keyType, totalPoint);
-
-    return TierInfoVO.builder()
-      .name(findMember.getName())
-      .tierGrade(tierHandler.getCurrentGrade(changePoint))
-      .totalPoint(totalPoint)
-      .changePoint(changePoint)
-      .untilNextTier(tierHandler.getPointUntilNextTier(changePoint))
-      .build();
+    return TierInfoDTO.of(tier, findMember);
   }
 
-  public List<Tier> getTierListByUserIdAndKeyType(String userId, KeyType keyType)
+  public List<RecordDetailDTO> getTierListByUserIdAndKeyType(String userId, KeyType keyType)
   {
     Member findMember = memberRepository.findByUserId(userId)
       .orElseThrow( () -> new ResourceNotFoundException("사용자 정보가 존재하지 않습니다.") );
 
-    return tierRepository.findTiersByMemberAndMusicKeyType(findMember, keyType);
+    return dtoRepository.findTop50RecordDetailDTOsByMemberAndKeyType(findMember, keyType);
   }
 }
