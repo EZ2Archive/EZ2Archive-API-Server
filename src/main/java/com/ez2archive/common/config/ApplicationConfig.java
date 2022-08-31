@@ -18,13 +18,16 @@ public class ApplicationConfig
   public Validator<Member> memberValidator() { return new DefaultMemberValidator(); }
 
   @Bean
-  public Validator<Record> recordValidator() { return new DefaultRecordValidator(); }
+  public Validator<RecordDetail> recordDetailValidator() { return new DefaultRecordDetailValidator(); }
 
   @Bean
   public Validator<MusicInfo> musicInfoValidator() { return new DefaultMusicInfoValidator(); }
 
   @Bean
   public Validator<Email> emailValidator() { return new DefaultEmailValidator(); }
+
+  @Bean
+  public Validator<RankSurvey> rankValidator() { return new DefaultRankValidator();}
 
   @Bean
   public TierHandler<TierGrade> tierHandler() { return new DefaultTierHandler(); }

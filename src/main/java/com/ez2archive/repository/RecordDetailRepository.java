@@ -13,4 +13,5 @@ public interface RecordDetailRepository extends JpaRepository<RecordDetail, Long
 {
   @Query("SELECT rd FROM RecordDetail rd JOIN rd.record r JOIN r.member m WHERE m.userId = :userId AND rd.musicInfoId = :musicInfoId ORDER BY rd.addTime DESC")
   List<RecordDetail> findRecordDetailsByUserIdAndMusicInfoId(@Param("userId") String userId, @Param("musicInfoId") Long musicInfoId);
+
 }

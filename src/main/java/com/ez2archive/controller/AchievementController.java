@@ -4,11 +4,11 @@ import com.ez2archive.common.aspect.RequiredToken;
 import com.ez2archive.common.auth.JwtToken;
 import com.ez2archive.common.auth.TokenProvider;
 import com.ez2archive.common.response.CommonResponse;
-import com.ez2archive.vo.AchieveVO;
 import com.ez2archive.entity.KeyType;
-import com.ez2archive.vo.OverallVO;
 import com.ez2archive.entity.RecordDetail;
 import com.ez2archive.service.AchievementService;
+import com.ez2archive.dto.achieve.AchieveDTO;
+import com.ez2archive.dto.achieve.OverallDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,11 +32,11 @@ public class AchievementController
   @Operation(summary = "Required = [Token, authority.REGULAR] 성과표 목록 조회")
   @RequestMapping(method = RequestMethod.GET, value = "/list/{keyType}/{level}")
   @RequiredToken
-  public ResponseEntity<CommonResponse<List<AchieveVO>>> achievementListGet(@ApiIgnore JwtToken token, @PathVariable KeyType keyType, @PathVariable int level)
+  public ResponseEntity<CommonResponse<List<AchieveDTO>>> achievementListGet(@ApiIgnore JwtToken token, @PathVariable KeyType keyType, @PathVariable int level)
   {
     final String userId = tokenProvider.getIdFromToken(token);
 
-    final List<AchieveVO> achievementList = achievementService.findAchievementList(userId, keyType, level);
+    final List<AchieveDTO> achievementList = achievementService.findAchievementList(userId, keyType, level);
 
     return ResponseEntity.ok().body(
       CommonResponse.success(achievementList)
@@ -46,14 +46,14 @@ public class AchievementController
   @Operation(summary = "Required = [Token, authority.REGULAR] 성과표 종합 조회")
   @RequestMapping(method = RequestMethod.GET, value = "/overall/{keyType}/{level}")
   @RequiredToken
-  public ResponseEntity<CommonResponse<OverallVO>> achievementOverallGet(@ApiIgnore JwtToken token, @PathVariable KeyType keyType, @PathVariable int level)
+  public ResponseEntity<CommonResponse<OverallDTO>> achievementOverallGet(@ApiIgnore JwtToken token, @PathVariable KeyType keyType, @PathVariable int level)
   {
     final String userId = tokenProvider.getIdFromToken(token);
 
-    final OverallVO overallVO = achievementService.findAchievementOverall(userId, keyType, level);
+    final OverallDTO overallDTO = achievementService.findAchievementOverall(userId, keyType, level);
 
     return ResponseEntity.ok().body(
-      CommonResponse.success(overallVO)
+      CommonResponse.success(overallDTO)
     );
   }
 
@@ -81,6 +81,20 @@ public class AchievementController
     achievementService.saveAchievementRecord(userId, recordDetail);
 
     return ResponseEntity.created(null).body(
+      CommonResponse.success()
+    );
+  }
+
+  @Operation(summary = "Required = [Token, authority.REGULAR] 성과표 점수 기록 삭제")
+  @RequestMapping(method = RequestMethod.DELETE, value="/delete")
+  @RequiredToken
+  public ResponseEntity<CommonResponse<?>> achievementDeleteRecordDelete(@ApiIgnore JwtToken token, @RequestParam Long recordDetailId)
+  {
+    final String userId = tokenProvider.getIdFromToken(token);
+
+    achievementService.deleteRecord(userId, recordDetailId);
+
+    return ResponseEntity.ok().body(
       CommonResponse.success()
     );
   }

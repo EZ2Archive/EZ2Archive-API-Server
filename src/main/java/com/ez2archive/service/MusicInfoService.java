@@ -8,7 +8,6 @@ import com.ez2archive.entity.KeyType;
 import com.ez2archive.entity.MusicInfo;
 import com.ez2archive.repository.MusicInfoRepository;
 import com.ez2archive.repository.RecordRepository;
-import com.ez2archive.repository.TierRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +23,6 @@ import java.util.List;
 public class MusicInfoService
 {
   private final MusicInfoRepository musicInfoRepository;
-  private final TierRepository tierRepository;
   private final RecordRepository recordRepository;
 
   private final Validator<MusicInfo> musicInfoValidator;
@@ -37,9 +35,7 @@ public class MusicInfoService
 
   public Page<MusicInfo> findByKeyTypeAndNameContaining(KeyType keyType, String keyword, Pageable pageable)
   {
-    Page<MusicInfo> musicInfoList = musicInfoRepository.findMusicInfosByKeyTypeAndNameContaining(keyType, keyword, pageable);
-
-    return musicInfoList;
+    return musicInfoRepository.findMusicInfosByKeyTypeAndNameContaining(keyType, keyword, pageable);
   }
 
   @Transactional
@@ -72,7 +68,6 @@ public class MusicInfoService
     if( findMusicInfo.getTotalNote() != musicInfo.getTotalNote() )
     {
       // 토탈 노트 수가 변했을 경우, 해당 음원의 이전 플레이 기록과 티어점수를 모두 삭제
-      tierRepository.deleteTiersByMusic(findMusicInfo);
       recordRepository.deleteRecordsByMusic(findMusicInfo);
     }
 
@@ -100,9 +95,4 @@ public class MusicInfoService
     return musicInfoRepository.findMusicInfosByKeyTypeAndLevelOrderByRankDescNameAsc(keyType, level);
   }
 
-  private boolean isTierAffected(MusicInfo actualMusicInfo, MusicInfo updateMusicInfo)
-  {
-    return actualMusicInfo.getLevel()   != updateMusicInfo.getLevel()
-      && actualMusicInfo.getTotalNote() != updateMusicInfo.getTotalNote();
-  }
 }

@@ -3,6 +3,7 @@ package com.ez2archive.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,6 +33,10 @@ public class Record
   private Member member;
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JoinColumn(name = "tier_point_id")
+  private TierPoint tierPoint;
+
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "record_detail_id", nullable = false)
   private RecordDetail recordDetail;
 
@@ -40,4 +45,17 @@ public class Record
   @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
   private LocalDateTime addTime;
 
+  public Record()
+  {
+  }
+
+  @Builder
+  public Record(Long id, MusicInfo music, Member member, RecordDetail recordDetail, LocalDateTime addTime)
+  {
+    this.id = id;
+    this.music = music;
+    this.member = member;
+    this.recordDetail = recordDetail;
+    this.addTime = addTime;
+  }
 }

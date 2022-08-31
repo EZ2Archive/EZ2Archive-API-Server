@@ -1,5 +1,8 @@
 package com.ez2archive.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum TierGrade
 {
   BEGINNER2(0), BEGINNER1(400),
@@ -23,5 +26,33 @@ public enum TierGrade
   public int score()
   {
     return this.score;
+  }
+
+  /**
+   * <pre>
+   *   인자로 받은 티어등급의 그룹을 반환한다.
+   *   예를 들어, TierGrade.SILVER2를 인자로 받을 경우 { TierGrade.SLIVER4, TierGrade.SLIVER3, TierGrade.SLIVER2, TierGrade.SLIVER1 } 를 반환한다.
+   * </pre>
+   *
+   * <pre>
+   * {@code
+   *   List<TierGrade> tierGradeList = TierGrade.ofGroup(TierGrade.SILVER2);
+   *   // tierGradeList = { TierGrade.SLIVER4, TierGrade.SLIVER3, TierGrade.SLIVER2, TierGrade.SLIVER1 }
+   * }
+   * </pre>
+   */
+  public static List<TierGrade> ofGroup(TierGrade tierGrade)
+  {
+    List<TierGrade> resultList = new ArrayList<>();
+
+    String tierStr = tierGrade.name().substring(0, tierGrade.name().length()-1);
+
+    for ( TierGrade grade : TierGrade.values() )
+    {
+      if( grade.name().contains(tierStr) )
+        resultList.add(grade);
+    }
+
+    return resultList;
   }
 }

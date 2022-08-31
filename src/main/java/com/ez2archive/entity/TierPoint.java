@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,10 +13,10 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
-public class Tier
+public class TierPoint
 {
   @Id @GeneratedValue
-  @Column(name = "tier_id")
+  @Column(name = "tier_point_id")
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -27,7 +28,9 @@ public class Tier
   @JoinColumn(name = "member_id", nullable = false)
   private Member member;
 
-  private int score;
+  @OneToOne(mappedBy = "tierPoint", fetch = FetchType.LAZY)
+  @JoinColumn(name = "record_id")
+  private Record record;
 
   private double point;
 
@@ -36,8 +39,18 @@ public class Tier
   @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
   private LocalDateTime addTime;
 
-  @Column(nullable = false)
-  @JsonSerialize(using = LocalDateTimeSerializer.class)
-  @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
-  private LocalDateTime lastUpdateTime;
+  public TierPoint()
+  {
+  }
+
+  @Builder
+  public TierPoint(Long id, MusicInfo music, Member member, Record record, double point, LocalDateTime addTime)
+  {
+    this.id = id;
+    this.music = music;
+    this.member = member;
+    this.record = record;
+    this.point = point;
+    this.addTime = addTime;
+  }
 }

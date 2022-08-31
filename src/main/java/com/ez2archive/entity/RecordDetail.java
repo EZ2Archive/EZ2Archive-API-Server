@@ -42,6 +42,7 @@ public class RecordDetail
   /** 등급(S+++, S+, A+, B) */
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
+  @ApiModelProperty(hidden = true)
   private Grade grade;
 
   @Column(nullable = false)
