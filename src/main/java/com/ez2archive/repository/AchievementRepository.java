@@ -42,7 +42,7 @@ public class AchievementRepository
     //nativeQuery.append(",      (SELECT f.FILEUUID FROM FILE f WHERE mi.FILE_ID = f.FILE_ID) ");
     nativeQuery.append("FROM MUSIC_INFO mi ");
     nativeQuery.append("  LEFT JOIN ( ");
-    nativeQuery.append("    SELECT tr2.RECORD_DETAIL_ID, tr2.MUSIC_INFO_ID, tr2.MEMBER_ID, tr2.TIER_POINT_ID, tr2.ADD_TIME ");
+    nativeQuery.append("    SELECT tr2.RECORD_DETAIL_ID, tr2.MUSIC_INFO_ID, tr2.MEMBER_ID, tr2.ADD_TIME ");
     nativeQuery.append("    FROM ( ");
     nativeQuery.append("      SELECT MUSIC_INFO_ID, MEMBER_ID, MAX(ADD_TIME) as ADD_TIME ");
     nativeQuery.append("      FROM RECORD tr2 ");
