@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings({ "StringBufferReplaceableByString", "StringBufferMayBeStringBuilder" })
 @Repository
 @RequiredArgsConstructor
-public class DTORepository
+public class DtoRepository
 {
   private final EntityManager em;
 
