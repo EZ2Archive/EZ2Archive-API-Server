@@ -29,7 +29,7 @@ public class AchievementService
   private final RecordDetailRepository recordDetailRepository;
   private final TierRepository tierRepository;
   private final MemberRepository memberRepository;
-  private final DTORepository dtoRepository;
+  private final DtoRepository dtoRepository;
 
   private final Validator<RecordDetail> recordDetailValidator;
 
