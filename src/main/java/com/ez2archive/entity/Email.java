@@ -1,11 +1,13 @@
 package com.ez2archive.entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 @Getter @Setter
@@ -22,7 +24,6 @@ public class Email
 
   /** use member */
   @OneToOne(fetch = FetchType.LAZY, mappedBy = "email")
-  @JoinColumn(name = "member_id", unique = true)
   private Member member;
 
   /** */
@@ -31,4 +32,27 @@ public class Email
   /** record added time */
   @JsonDeserialize
   private LocalDateTime addTime;
+
+  @JsonDeserialize
+  private LocalDateTime expireTime;
+
+  public Email()
+  {
+  }
+
+  @Builder
+  public Email(Long id, String address, Member member, boolean verify, LocalDateTime addTime, LocalDateTime expireTime)
+  {
+    this.id = id;
+    this.address = address;
+    this.member = member;
+    this.verify = verify;
+    this.addTime = addTime;
+    this.expireTime = expireTime;
+  }
+
+  public static LocalDateTime getExpireTime(LocalDateTime addTime)
+  {
+    return addTime.plus(30, ChronoUnit.MINUTES);
+  }
 }
