@@ -29,7 +29,9 @@ public class WebMvcConfig implements WebMvcConfigurer
   {
     // Global CORS Setting
     registry.addMapping("/**")
-      .allowedOrigins("*");
+      .allowedMethods("*")
+      .allowedHeaders("*")
+      .allowedOrigins("https://ez2onarchive-ac049.web.app/");
 
     WebMvcConfigurer.super.addCorsMappings(registry);
   }
