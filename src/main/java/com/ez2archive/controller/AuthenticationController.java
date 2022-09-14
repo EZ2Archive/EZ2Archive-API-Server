@@ -25,7 +25,7 @@ public class AuthenticationController
 
   @Operation(summary = "로그인")
   @RequestMapping(method = RequestMethod.POST, value = "/login")
-  public ResponseEntity<CommonResponse<JwtToken>> loginPost(@ApiIgnore HttpServletRequest request, @RequestBody RequestLoginDTO requestLoginDTO)
+  public ResponseEntity<CommonResponse<JwtToken>> loginPost(@ApiIgnore HttpServletRequest request, @RequestBody RequestLoginDTO requestLoginDTO) throws InterruptedException
   {
     // 헤더에 토큰이 존재하지 않거나 토큰이 유효하지 않은 경우 로그인 시도
     return ResponseEntity.ok().body(

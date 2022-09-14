@@ -74,9 +74,11 @@ public class LoginService
     memberRepository.save(member);
   }
 
-  public JwtToken login(HttpServletRequest request, RequestLoginDTO requestLoginDTO)
+  public JwtToken login(HttpServletRequest request, RequestLoginDTO requestLoginDTO) throws InterruptedException
   {
     JwtToken jwtToken;
+
+    Thread.sleep(1500);
 
     if( !loginValidator.isValidWithTrim(requestLoginDTO) ) throw new IllegalValueException("잘못된 요청의 양식입니다.");
 
@@ -158,7 +160,7 @@ public class LoginService
     String expectedAddress = emailCryptHandler.encode(email);
     String actualAddress = findMember.getEmail().getAddress();
 
-    if( !expectedAddress.equals(actualAddress) ) new AuthenticationException("해당 사용자의 이메일이 일치하지 않습니다.");
+    if( !expectedAddress.equals(actualAddress) ) throw new AuthenticationException("해당 사용자의 이메일이 일치하지 않습니다.");
 
     // TODO --> 임시 패스워드 재설정 or 패스워드 재설정 form 양식 세팅
     // TODO --> 이메일 발송
