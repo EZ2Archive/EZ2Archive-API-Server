@@ -1,7 +1,6 @@
 package com.ez2archive.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -12,8 +11,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 음원 정보 엔티티 클래스
@@ -73,11 +70,6 @@ public class MusicInfo
 
   /** 음원 노트 수 합계 */
   private int totalNote;
-
-  @OneToMany(mappedBy = "music")
-  @JsonIgnore
-  @ApiModelProperty(hidden = true)
-  private List<Record> recordList = new ArrayList<>();
 
   /** 음원 추가 시각 */
   @Column(nullable = false)
