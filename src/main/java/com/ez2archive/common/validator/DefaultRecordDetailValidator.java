@@ -15,7 +15,8 @@ public class DefaultRecordDetailValidator implements Validator<RecordDetail>
 
   private boolean isValidScore(int score, int bestScore)
   {
-    return score >= 0 && score <= bestScore;
+    return (score >= 0 && score <= bestScore)
+      && (score >= Grade.F.score());
   }
 
   private boolean isBadgeValid(boolean allCool, boolean noMiss)
