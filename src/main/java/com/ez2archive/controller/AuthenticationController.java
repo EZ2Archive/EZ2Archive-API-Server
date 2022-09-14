@@ -37,10 +37,10 @@ public class AuthenticationController
 
   @Operation(summary = "회원가입")
   @RequestMapping(method = RequestMethod.POST, value = "/signUp")
-  public ResponseEntity<CommonResponse<?>> signUpPost(@RequestBody RequestSignUpDTO dto)
+  public ResponseEntity<CommonResponse<?>> signUpPost(@RequestBody RequestSignUpDTO requestSignUpDTO)
   {
-    loginService.sinUp(dto);
-    verifyService.sendVerifyMail(dto.getEmail());
+    loginService.sinUp(requestSignUpDTO);
+    verifyService.sendVerifyMail(requestSignUpDTO.getEmail());
 
     return ResponseEntity.ok().body(
       CommonResponse.success()
