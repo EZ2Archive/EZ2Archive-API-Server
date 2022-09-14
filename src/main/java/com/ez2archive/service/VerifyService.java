@@ -7,13 +7,10 @@ import com.ez2archive.common.handler.crypt.EmailCryptHandler;
 import com.ez2archive.entity.Email;
 import com.ez2archive.repository.EmailRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.mail.Message;
-import javax.mail.internet.InternetAddress;
 import java.net.URI;
 import java.time.LocalDateTime;
 
@@ -26,7 +23,7 @@ public class VerifyService
 
   private final EmailCryptHandler emailCryptHandler;
 
-  private final JavaMailSender mailSender;
+  private final EmailService emailService;
 
   @Transactional
   public void sendVerifyMail(String address)
@@ -44,13 +41,7 @@ public class VerifyService
 
     findEmail.setExpireTime(Email.getExpireTime(LocalDateTime.now()));
 
-    mailSender.send(mimeMessage -> {
-      mimeMessage.setFrom(new InternetAddress("ez2archive1@gmail.com", "EZ2Archive", "UTF-8"));
-      mimeMessage.addRecipients(Message.RecipientType.TO, address);
-      mimeMessage.setSubject("[EZ2Archive] Please verify your email");
-      mimeMessage.setText("본 메일은 발신전용으로 아래의 링크를 클릭하여 인증을 완료하세요.\n\n" + uri);
-    });
-
+    emailService.send(address, "[EZ2Archive] Please verify your email" , "아래의 링크를 클릭하여 인증을 완료하세요.\n\n" + uri);
   }
 
   @Transactional
