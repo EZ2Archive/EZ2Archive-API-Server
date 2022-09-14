@@ -71,9 +71,9 @@ public class AchieveDTO
   /**
    * QLRM 전용 생성자 (MySQL)
    */
-  public AchieveDTO(BigInteger recordId, BigInteger musicInfoId, String name, BigInteger score, BigInteger avgScore, Double point, BigInteger avgPoint, Float percentage, int rank, String difficulty, String grade, BigDecimal isAllCool, BigDecimal isNoMiss)
+  public AchieveDTO(BigInteger recordId, BigInteger musicInfoId, String name, BigInteger score, BigInteger avgScore, Double point, BigInteger avgPoint, Double percentage, int rank, String difficulty, String grade, BigDecimal isAllCool, BigDecimal isNoMiss)
   {
-    this(recordId.longValue(), musicInfoId.longValue(), name, score.intValue(), avgScore.doubleValue(), point, avgPoint.doubleValue(), percentage.doubleValue(), rank, difficulty, grade, isAllCool.intValue() > 0, isNoMiss.intValue() > 0);
+    this(recordId.longValue(), musicInfoId.longValue(), name, score.intValue(), avgScore.doubleValue(), point, avgPoint.doubleValue(), percentage, rank, difficulty, grade, isAllCool.intValue() > 0, isNoMiss.intValue() > 0);
   }
 
 }
