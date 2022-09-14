@@ -16,7 +16,9 @@ public interface TokenProvider<ID, TOKEN>
    * @param id
    * @return
    */
-  TOKEN issue(ID id);
+  String issueAccessToken(ID id);
+
+  String issueRefreshToken(ID id);
 
   /**
    * 토큰으로 부터 식별자 추출 (반드시 isValid()를 통해 유효성을 확인하고 호출할 것)

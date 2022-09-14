@@ -1,21 +1,32 @@
 package com.ez2archive.common.auth;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import org.springframework.data.annotation.Id;
 
-@Getter @Setter
+@Getter
 public class JwtToken
 {
   @ApiModelProperty(hidden = true)
   private String type;
 
   @ApiModelProperty(hidden = true)
-  private String token;
+  private String accessToken;
 
-  public JwtToken(String type, String token)
+  @ApiModelProperty(hidden = true)
+  @Id
+  private String refreshToken;
+
+  public JwtToken()
+  {
+  }
+
+  @Builder
+  public JwtToken(String type, String accessToken, String refreshToken)
   {
     this.type = type;
-    this.token = token;
+    this.accessToken = accessToken;
+    this.refreshToken = refreshToken;
   }
 }
