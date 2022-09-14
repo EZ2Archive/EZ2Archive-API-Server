@@ -1,7 +1,6 @@
 package com.ez2archive.controller;
 
 import com.ez2archive.common.auth.JwtToken;
-import com.ez2archive.common.auth.TokenProvider;
 import com.ez2archive.common.response.CommonResponse;
 import com.ez2archive.dto.auth.RequestLoginDTO;
 import com.ez2archive.dto.auth.RequestSignUpDTO;
@@ -21,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 @RequiredArgsConstructor
 public class AuthenticationController
 {
-  private final TokenProvider<String, JwtToken> tokenProvider;
   private final LoginService loginService;
   private final VerifyService verifyService;
 
