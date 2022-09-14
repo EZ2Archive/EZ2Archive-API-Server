@@ -41,7 +41,7 @@ public class VerifyService
 
     findEmail.setExpireTime(Email.getExpireTime(LocalDateTime.now()));
 
-    emailService.send(address, "[EZ2Archive] Please verify your email" , "아래의 링크를 클릭하여 인증을 완료하세요.\n\n" + uri);
+    emailService.send(address, "인증을 완료해주세요." , "아래의 링크를 클릭하여 인증을 완료하세요.\n\n" + uri);
   }
 
   @Transactional

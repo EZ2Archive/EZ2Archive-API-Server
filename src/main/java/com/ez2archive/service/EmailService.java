@@ -11,6 +11,7 @@ import javax.mail.internet.InternetAddress;
 @RequiredArgsConstructor
 public class EmailService
 {
+  private static final String TITLE_SUBJECT = "[EZ2Archive] ";
   private final JavaMailSender mailSender;
 
   public void send(String to, String subject, String text)
@@ -18,7 +19,7 @@ public class EmailService
     mailSender.send(mimeMessage -> {
       mimeMessage.setFrom(new InternetAddress("ez2archive1@gmail.com", "EZ2Archive", "UTF-8"));
       mimeMessage.addRecipients(Message.RecipientType.TO, to);
-      mimeMessage.setSubject("[EZ2Archive] " + subject);
+      mimeMessage.setSubject(TITLE_SUBJECT + subject);
       mimeMessage.setText(text);
     });
   }
