@@ -1,12 +1,12 @@
 package com.ez2archive.controller;
 
-import com.ez2archive.common.auth.TokenProvider;
 import com.ez2archive.common.auth.JwtToken;
-import com.ez2archive.common.exception.auth.AuthenticationException;
+import com.ez2archive.common.auth.TokenProvider;
 import com.ez2archive.common.response.CommonResponse;
-import com.ez2archive.entity.Member;
+import com.ez2archive.dto.auth.RequestLoginDTO;
+import com.ez2archive.dto.auth.RequestSignUpDTO;
 import com.ez2archive.service.LoginService;
-import io.jsonwebtoken.JwtException;
+import com.ez2archive.service.VerifyService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,37 +23,24 @@ public class AuthenticationController
 {
   private final TokenProvider<String, JwtToken> tokenProvider;
   private final LoginService loginService;
+  private final VerifyService verifyService;
 
   @Operation(summary = "로그인")
   @RequestMapping(method = RequestMethod.POST, value = "/login")
-  public ResponseEntity<CommonResponse<JwtToken>> loginPost(@ApiIgnore HttpServletRequest request, @RequestParam String userId, @RequestParam String password)
+  public ResponseEntity<CommonResponse<JwtToken>> loginPost(@ApiIgnore HttpServletRequest request, @RequestBody RequestLoginDTO requestLoginDTO)
   {
-    JwtToken token;
-
-    try
-    {
-      token = tokenProvider.getToken(request);
-
-      tokenProvider.isValid(token);
-
-      if( !userId.equals(tokenProvider.getIdFromToken(token)) ) throw new AuthenticationException("토큰의 사용자 아이디가 일치하지 않습니다.");
-    }
-    catch( AuthenticationException | JwtException e )
-    {
-      // 헤더에 토큰이 존재하지 않거나 토큰이 유효하지 않은 경우 로그인 시도
-      token = loginService.login(request, userId, password);
-    }
-
+    // 헤더에 토큰이 존재하지 않거나 토큰이 유효하지 않은 경우 로그인 시도
     return ResponseEntity.ok().body(
-      CommonResponse.success(token)
+      CommonResponse.success( loginService.login(request, requestLoginDTO) )
     );
   }
 
   @Operation(summary = "회원가입")
   @RequestMapping(method = RequestMethod.POST, value = "/signUp")
-  public ResponseEntity<CommonResponse<?>> signUpPost(@RequestBody Member member)
+  public ResponseEntity<CommonResponse<?>> signUpPost(@RequestBody RequestSignUpDTO dto)
   {
-    loginService.sinUp(member);
+    loginService.sinUp(dto);
+    verifyService.sendVerifyMail(dto.getEmail());
 
     return ResponseEntity.ok().body(
       CommonResponse.success()
@@ -72,5 +59,23 @@ public class AuthenticationController
         .data(isExist)
         .build()
     );
+  }
+
+  @Operation(summary = "패스워드 재설정 이메일 발송")
+  @RequestMapping(method = RequestMethod.POST, value = "/passwordre")
+  public ResponseEntity<CommonResponse<?>> passwordRePost(@RequestParam String userId, @RequestParam String email)
+  {
+    loginService.passwordRe(userId, email);
+
+    // WIP
+    throw new UnsupportedOperationException();
+  }
+
+  @Operation(summary = "[Required = [Refresh Token] 엑세스 토큰 연장 요청")
+  @RequestMapping(method = RequestMethod.GET, value = "/poll")
+  public ResponseEntity<CommonResponse<String>> pollGet(@ApiIgnore JwtToken jwtToken)
+  {
+    // WIP
+    throw new UnsupportedOperationException();
   }
 }
