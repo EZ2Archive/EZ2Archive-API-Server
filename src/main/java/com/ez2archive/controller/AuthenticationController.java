@@ -67,7 +67,7 @@ public class AuthenticationController
   {
     loginService.passwordRe(userId, email);
 
-    // WIP
+    // TODO --> 패스워드 재설정 이메일 발송 WIP
     throw new UnsupportedOperationException();
   }
 
@@ -75,7 +75,7 @@ public class AuthenticationController
   @RequestMapping(method = RequestMethod.GET, value = "/poll")
   public ResponseEntity<CommonResponse<String>> pollGet(@ApiIgnore JwtToken jwtToken)
   {
-    // WIP
+    // TODO --> 엑세스 토큰 연장 요청 WIP
     throw new UnsupportedOperationException();
   }
 }
