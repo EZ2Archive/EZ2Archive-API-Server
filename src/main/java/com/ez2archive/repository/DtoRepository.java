@@ -46,22 +46,22 @@ public class DtoRepository
 //      .getResultList();
 
     StringBuffer query = new StringBuffer();
-    query.append("SELECT tmp.music_info_id, tmp.name, avg(tmp.score), avg(tmp.point) ");
-    query.append("FROM( ");
-    query.append("  SELECT m.member_id, mi.music_info_id, mi.name, max(rd.score) as score, max(rd.point) as point ");
-    query.append("  FROM Record r ");
-    query.append("    JOIN (SELECT m.member_id ");
-    query.append("      FROM Tier t ");
-    query.append("        JOIN Member m ON t.member_id = m.member_id ");
-    query.append("      WHERE t.tier_grade IN :tierGradeList ");
-    query.append("      AND   t.key_type   = :keyType ");
-    query.append("    )m ON m.member_id = r.member_id ");
-    query.append("    JOIN Record_Detail rd ON rd.record_detail_id = r.record_detail_id ");
-    query.append("    JOIN Music_Info mi ON mi.music_info_id = r.music_info_id ");
-    query.append("  WHERE mi.level = :level ");
-    query.append("  GROUP BY m.member_id, mi.music_info_id, mi.name ");
+    query.append("select tmp.music_info_id, tmp.name, avg(tmp.score), avg(tmp.point) ");
+    query.append("from( ");
+    query.append("  select m.member_id, mi.music_info_id, mi.name, max(rd.score) as score, max(rd.point) as point ");
+    query.append("  from record r ");
+    query.append("    join (select m.member_id ");
+    query.append("      from tier t ");
+    query.append("        join member m on t.member_id = m.member_id ");
+    query.append("      where t.tier_grade in :tierGradeList ");
+    query.append("      and   t.key_type   = :keyType ");
+    query.append("    )m on m.member_id = r.member_id ");
+    query.append("    join record_detail rd on rd.record_detail_id = r.record_detail_id ");
+    query.append("    join music_info mi on mi.music_info_id = r.music_info_id ");
+    query.append("  where mi.level = :level ");
+    query.append("  group by m.member_id, mi.music_info_id, mi.name ");
     query.append(") tmp ");
-    query.append("GROUP BY tmp.music_info_id, tmp.name ");
+    query.append("group by tmp.music_info_id, tmp.name ");
 
     return resultMapper.list(em.createNativeQuery(query.toString())
       .setParameter("tierGradeList", tierGradeList.stream().map(TierGrade::name).collect(Collectors.toList()))
