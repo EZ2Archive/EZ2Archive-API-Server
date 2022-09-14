@@ -1,8 +1,8 @@
 package com.ez2archive.common.config;
 
+import com.ez2archive.common.auth.JwtToken;
 import com.ez2archive.common.auth.JwtTokenProvider;
 import com.ez2archive.common.auth.TokenProvider;
-import com.ez2archive.common.auth.JwtToken;
 import com.ez2archive.common.crypt.DefaultPasswordCryptor;
 import com.ez2archive.common.handler.crypt.DefaultEmailCryptor;
 import com.ez2archive.common.handler.crypt.EmailCryptHandler;
@@ -27,6 +27,9 @@ public class SecurityConfig
   @Value("${ez2archive.security.email.salt}")
   private String EMAIL_SALT;
 
+  @Value("${ez2archive.security.jwt.secret-key}")
+  protected String TOKEN_SECRET_KEY;
+
   @Bean
   public PasswordCryptHandler passwordCryptHandler() { return new PasswordCryptHandler(new DefaultPasswordCryptor(PASSWORD_ALGORITHM)); }
 
@@ -40,5 +43,5 @@ public class SecurityConfig
   }
 
   @Bean
-  public TokenProvider<String, JwtToken> tokenProvider() { return new JwtTokenProvider(); }
+  public TokenProvider<String, JwtToken> tokenProvider() { return new JwtTokenProvider(TOKEN_SECRET_KEY); }
 }
