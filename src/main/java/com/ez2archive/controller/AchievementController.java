@@ -4,11 +4,12 @@ import com.ez2archive.common.aspect.RequiredToken;
 import com.ez2archive.common.auth.JwtToken;
 import com.ez2archive.common.auth.TokenProvider;
 import com.ez2archive.common.response.CommonResponse;
+import com.ez2archive.dto.achieve.AchieveDTO;
+import com.ez2archive.dto.achieve.AchieveDetailDTO;
+import com.ez2archive.dto.achieve.OverallDTO;
 import com.ez2archive.entity.KeyType;
 import com.ez2archive.entity.RecordDetail;
 import com.ez2archive.service.AchievementService;
-import com.ez2archive.dto.achieve.AchieveDTO;
-import com.ez2archive.dto.achieve.OverallDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -86,7 +87,7 @@ public class AchievementController
   }
 
   @Operation(summary = "Required = [Token, authority.REGULAR] 성과표 점수 기록 삭제")
-  @RequestMapping(method = RequestMethod.DELETE, value="/delete")
+  @RequestMapping(method = RequestMethod.DELETE, value = "/delete")
   @RequiredToken
   public ResponseEntity<CommonResponse<?>> achievementDeleteRecordDelete(@ApiIgnore JwtToken token, @RequestParam Long recordDetailId)
   {
@@ -96,6 +97,20 @@ public class AchievementController
 
     return ResponseEntity.ok().body(
       CommonResponse.success()
+    );
+  }
+
+  @Operation(summary = "Required = [Token, authority.REGULAR] 성과표 상세정보 조회")
+  @RequestMapping(method = RequestMethod.GET, value = "/detail/{musicInfoId}")
+  @RequiredToken
+  public ResponseEntity<CommonResponse<AchieveDetailDTO>> achievementDetailGet(@ApiIgnore JwtToken token, @PathVariable Long musicInfoId)
+  {
+    final String userId = tokenProvider.getIdFromToken(token);
+
+    AchieveDetailDTO achieveDetail = achievementService.findAchievementDetail(userId, musicInfoId);
+
+    return ResponseEntity.ok().body(
+      CommonResponse.success(achieveDetail)
     );
   }
 

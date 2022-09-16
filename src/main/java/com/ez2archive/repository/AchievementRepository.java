@@ -30,9 +30,7 @@ public class AchievementRepository
     nativeQuery.append(",      mi.music_info_id ");
     nativeQuery.append(",      mi.name ");
     nativeQuery.append(",      coalesce(rd.score, -1) ");
-    nativeQuery.append(",      -1  as avgscore ");
     nativeQuery.append(",      coalesce(rd.point, -1) ");
-    nativeQuery.append(",      -1  as avgpoint ");
     nativeQuery.append(",      coalesce(rd.percentage, -1) ");
     nativeQuery.append(",      mi.ranks ");
     nativeQuery.append(",      mi.difficulty ");

@@ -4,6 +4,7 @@ import com.ez2archive.common.exception.business.IllegalValueException;
 import com.ez2archive.common.exception.business.ResourceNotFoundException;
 import com.ez2archive.common.validator.Validator;
 import com.ez2archive.dto.achieve.AchieveDTO;
+import com.ez2archive.dto.achieve.AchieveDetailDTO;
 import com.ez2archive.dto.achieve.OverallDTO;
 import com.ez2archive.dto.tier.RecordDetailDTO;
 import com.ez2archive.dto.tier.TierAverageDTO;
@@ -40,29 +41,7 @@ public class AchievementService
     Member member = memberRepository.findByUserId(userId)
       .orElseThrow( () -> new ResourceNotFoundException("사용자 정보가 존재하지 않습니다.") );
 
-    Tier tier = tierRepository.findTierByMemberAndKeyType(member, keyType)
-      .orElseGet( () ->
-        Tier.builder()
-          .tierGrade(TierGrade.BEGINNER2)
-          .build()
-      );
-
-    List<TierGrade> tierGradeList = TierGrade.ofGroup(tier.getTierGrade());
-
-    List<TierAverageDTO> tierAvgList = dtoRepository.findAvgRecordByMusicInTierGradeAndKeyType(tierGradeList, keyType, level);
-    List<AchieveDTO> achieveList = achieveRepository.findAchieveListByUserIdWithKeyTypeWithLevel(userId, keyType, level);
-    achieveList.forEach(achieve -> {
-        for ( TierAverageDTO tierAvg : tierAvgList )
-        {
-          if( tierAvg.getMusicInfoId().equals( achieve.getMusicInfoId() ) )
-          {
-            achieve.setAvgScore( tierAvg.getAverageScore() );
-            achieve.setAvgPoint( tierAvg.getAveragePoint() );
-          }
-        }
-      });
-
-    return achieveList;
+    return achieveRepository.findAchieveListByUserIdWithKeyTypeWithLevel(userId, keyType, level);
   }
 
   public OverallDTO findAchievementOverall(String userId, KeyType keyType, int level)
@@ -179,5 +158,34 @@ public class AchievementService
     findTier.setLastModifyTime(LocalDateTime.now());
 
     tierRepository.save(findTier);
+  }
+
+  public AchieveDetailDTO findAchievementDetail(String userId, Long musicInfoId)
+  {
+    Member findMember = memberRepository.findByUserId(userId)
+      .orElseThrow( () -> new ResourceNotFoundException("사용자 정보가 존재하지 않습니다.") );
+
+    MusicInfo findMusicInfo = musicInfoRepository.findById(musicInfoId)
+      .orElseThrow( () -> new ResourceNotFoundException("음원 정보가 존재하지 않습니다.") );
+
+    // 사용자의 현재 티어구간 조회
+    Tier tier = tierRepository.findTierByMemberAndKeyType(findMember, findMusicInfo.getKeyType())
+      .orElseGet( () ->
+        Tier.builder()
+          .tierGrade(TierGrade.BEGINNER2)
+          .build()
+      );
+    List<TierGrade> tierGradeList = TierGrade.ofGroup(tier.getTierGrade());
+
+    // 사용자의 현재 티어구간 평균스코어, 평균티어점수 조회
+    TierAverageDTO tierAverage = dtoRepository.findAvgRecordByMusicInfoIdInTierGrade(tierGradeList, findMusicInfo.getKeyType(), musicInfoId)
+      .orElseGet(TierAverageDTO::new);
+
+    return AchieveDetailDTO.builder()
+      .musicInfoId(musicInfoId)
+      .name(findMusicInfo.getName())
+      .avgScore(tierAverage.getAverageScore())
+      .avgTierPoint(tierAverage.getAveragePoint())
+      .build();
   }
 }

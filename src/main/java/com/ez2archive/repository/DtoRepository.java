@@ -10,7 +10,9 @@ import org.qlrm.mapper.JpaResultMapper;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @SuppressWarnings({ "StringBufferReplaceableByString", "StringBufferMayBeStringBuilder" })
@@ -22,29 +24,15 @@ public class DtoRepository
 
   private final JpaResultMapper resultMapper;
 
-  public List<TierAverageDTO> findAvgRecordByMusicInTierGradeAndKeyType(List<TierGrade> tierGradeList, KeyType keyType, int level)
+  /**
+   * 사용자 티어구간으로부터 평균 스코어, 평균 티어포인트 조회한다.
+   * @param tierGradeList 사용자의 티어구간 목록 (ex. SILVER2 = {SILVER1, SILVER2, SILVER3, SILVER4})
+   * @param keyType 조회할 키 타입
+   * @param level 조회할 레벨
+   * @return
+   */
+  public List<TierAverageDTO> findAvgRecordsByMusicInTierGradeAndKeyType(List<TierGrade> tierGradeList, KeyType keyType, int level)
   {
-//    StringBuffer query = new StringBuffer();
-//    query.append("SELECT new com.ez2archive.dto.tier.TierAverageDTO(mi.id, mi.name, avg(rd.score), avg(rd.point)) ");
-//    query.append("FROM Record r ");
-//    query.append("  JOIN r.music mi ");
-//    query.append("  JOIN r.member m ");
-//    query.append("  JOIN r.recordDetail rd ");
-//    query.append("WHERE m IN (SELECT m ");
-//    query.append("  FROM Tier t ");
-//    query.append("    JOIN t.member m ");
-//    query.append("  WHERE t.tierGrade IN :tierGradeList ");
-//    query.append("  AND t.keyType = :keyType ");
-//    query.append(")");
-//    query.append("GROUP BY mi.id, mi.name, mi.level ");
-//    query.append("HAVING mi.level = :level");
-//
-//    return em.createQuery(query.toString(), TierAverageDTO.class)
-//      .setParameter("tierGradeList", tierGradeList)
-//      .setParameter("keyType", keyType)
-//      .setParameter("level", level)
-//      .getResultList();
-
     StringBuffer query = new StringBuffer();
     query.append("select tmp.music_info_id, tmp.name, avg(tmp.score), avg(tmp.point) ");
     query.append("from( ");
@@ -71,6 +59,13 @@ public class DtoRepository
     );
 
   }
+
+  /**
+   * 플레이 기록 중 티어포인트가 가장 높은 50곡 목록을 조회한다.
+   * @param member 조회할 사용자
+   * @param keyType 조회할 키 타입
+   * @return
+   */
   public List<RecordDetailDTO> findTop50RecordDetailDTOsByMemberAndKeyType(Member member, KeyType keyType)
   {
     StringBuffer query = new StringBuffer();
@@ -89,5 +84,52 @@ public class DtoRepository
         .setMaxResults(50)
       , RecordDetailDTO.class
     );
+  }
+
+  /**
+   * 사용자 티어구간으로부터 평균 스코어, 평균 티어포인트 조회한다.
+   * @param tierGradeList 사용자의 티어구간 목록 (ex. SILVER2 = {SILVER1, SILVER2, SILVER3, SILVER4})
+   * @param keyType 조회할 키 타입
+   * @param musicInfoId 조회할 음원
+   * @return
+   */
+  public Optional<TierAverageDTO> findAvgRecordByMusicInfoIdInTierGrade(List<TierGrade> tierGradeList, KeyType keyType, Long musicInfoId)
+  {
+    StringBuffer query = new StringBuffer();
+    query.append("select tmp.music_info_id, tmp.name, avg(tmp.score), avg(tmp.point) ");
+    query.append("from( ");
+    query.append("  select m.member_id, mi.music_info_id, mi.name, max(rd.score) as score, max(rd.point) as point ");
+    query.append("  from record r ");
+    query.append("    join (select m.member_id ");
+    query.append("      from tier t ");
+    query.append("        join member m on t.member_id = m.member_id ");
+    query.append("      where t.tier_grade in :tierGradeList ");
+    query.append("      and   t.key_type   = :keyType ");
+    query.append("    )m on m.member_id = r.member_id ");
+    query.append("    join record_detail rd on rd.record_detail_id = r.record_detail_id ");
+    query.append("    join music_info mi on mi.music_info_id = r.music_info_id ");
+    query.append("  where mi.music_info_id = :musicInfoId ");
+    query.append("  group by m.member_id, mi.music_info_id, mi.name ");
+    query.append(") tmp ");
+    query.append("group by tmp.music_info_id, tmp.name ");
+
+    Optional<TierAverageDTO> result;
+
+    try
+    {
+      result = Optional.ofNullable(resultMapper.uniqueResult(
+        em.createNativeQuery(query.toString())
+          .setParameter("tierGradeList", tierGradeList.stream().map(TierGrade::name).collect(Collectors.toList()))
+          .setParameter("keyType", keyType.name())
+          .setParameter("musicInfoId", musicInfoId),
+        TierAverageDTO.class
+      ));
+    }
+    catch( NoResultException e )
+    {
+      result = Optional.empty();
+    }
+
+    return result;
   }
 }
