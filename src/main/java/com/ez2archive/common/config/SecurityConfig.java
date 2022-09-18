@@ -3,7 +3,7 @@ package com.ez2archive.common.config;
 import com.ez2archive.common.auth.JwtToken;
 import com.ez2archive.common.auth.JwtTokenProvider;
 import com.ez2archive.common.auth.TokenProvider;
-import com.ez2archive.common.crypt.DefaultPasswordCryptor;
+import com.ez2archive.common.crypt.DefaultHashCryptor;
 import com.ez2archive.common.crypt.DefaultEmailCryptor;
 import com.ez2archive.common.handler.crypt.EmailCryptHandler;
 import com.ez2archive.common.handler.crypt.PasswordCryptHandler;
@@ -31,10 +31,10 @@ public class SecurityConfig
   protected String TOKEN_SECRET_KEY;
 
   @Bean
-  public PasswordCryptHandler passwordCryptHandler() { return new PasswordCryptHandler(new DefaultPasswordCryptor(PASSWORD_ALGORITHM)); }
+  public PasswordCryptHandler passwordCryptHandler() { return new PasswordCryptHandler(new DefaultHashCryptor(PASSWORD_ALGORITHM)); }
 
   @Bean
-  public EmailCryptHandler emailCryptHandler() { return new EmailCryptHandler(new DefaultEmailCryptor(EMAIL_ALGORITHM, EMAIL_SALT)); }
+  public EmailCryptHandler emailCryptHandler() { return new EmailCryptHandler(new DefaultEmailCryptor(EMAIL_ALGORITHM), EMAIL_SALT); }
 
   @Bean
   public SecureRandom secureRandom()

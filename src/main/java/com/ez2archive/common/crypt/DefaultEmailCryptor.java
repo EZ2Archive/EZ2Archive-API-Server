@@ -7,13 +7,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 @RequiredArgsConstructor
-public class DefaultEmailCryptor implements DoubleHashingCryptor
+public class DefaultEmailCryptor implements HashCryptor
 {
   private final String algorithm;
-  private final String salt;
 
   @Override
-  public byte[] encode(String message)
+  public byte[] encrypt(String message, Object salt)
   {
     byte [] result = null;
 

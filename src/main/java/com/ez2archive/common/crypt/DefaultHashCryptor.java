@@ -7,11 +7,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 @RequiredArgsConstructor
-public class DefaultPasswordCryptor implements PasswordCryptor
+public class DefaultHashCryptor implements HashCryptor
 {
   private final String algorithm;
 
-  public byte [] encrypt(String message, long salt)
+  public byte [] encrypt(String message, Object salt)
   {
     byte [] result = null;
 
@@ -19,7 +19,7 @@ public class DefaultPasswordCryptor implements PasswordCryptor
     {
       final MessageDigest md = MessageDigest.getInstance( this.algorithm );
 
-      result = md.digest( (message + salt).getBytes(StandardCharsets.UTF_8) );
+      result = md.digest( (message + salt.toString()).getBytes(StandardCharsets.UTF_8) );
     }
     catch ( NoSuchAlgorithmException e )
     {
