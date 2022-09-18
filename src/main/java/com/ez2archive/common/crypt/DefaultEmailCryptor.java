@@ -1,6 +1,5 @@
-package com.ez2archive.common.handler.crypt;
+package com.ez2archive.common.crypt;
 
-import com.ez2archive.common.crypt.DoubleHashingCryptor;
 import lombok.RequiredArgsConstructor;
 
 import java.nio.charset.StandardCharsets;
