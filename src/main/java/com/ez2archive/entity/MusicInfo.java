@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -83,4 +84,24 @@ public class MusicInfo
   @Lob
   private String description;
 
+  public MusicInfo()
+  {
+  }
+
+  @Builder
+  public MusicInfo(Long id, String name, String artist, KeyType keyType, MusicDifficulty difficulty, String category, int level, int rank, int bestScore, int totalNote, LocalDateTime addTime, String description)
+  {
+    this.id = id;
+    this.name = name;
+    this.artist = artist;
+    this.keyType = keyType;
+    this.difficulty = difficulty;
+    this.category = category;
+    this.level = level;
+    this.rank = rank;
+    this.bestScore = bestScore;
+    this.totalNote = totalNote;
+    this.addTime = addTime;
+    this.description = description;
+  }
 }
