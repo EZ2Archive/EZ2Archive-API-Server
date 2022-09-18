@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 public class EmailCryptHandler
 {
   private final HashCryptor hashCryptor;
-  private final String emailSalt;
+  private final Object emailSalt;
 
   public String encode(String message)
   {
