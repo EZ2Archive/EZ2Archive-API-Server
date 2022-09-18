@@ -17,7 +17,7 @@ import java.security.SecureRandom;
 @PropertySource("classpath:security.properties")
 public class SecurityConfig
 {
-  @Value("${ez2archive.security.password.algorithm}")
+  @Value("${ez2archive.security.hash.algorithm}")
   private String HASH_ALGORITHM;
 
   @Value("${ez2archive.security.email.salt}")
