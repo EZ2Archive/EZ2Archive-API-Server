@@ -8,19 +8,19 @@ import org.springframework.data.redis.core.RedisHash;
 
 @RedisHash("tokens")
 @Getter @Setter
-public class Token
+public class RefreshToken
 {
   @Id
   private String userId;
 
   private String refreshToken;
 
-  public Token()
+  public RefreshToken()
   {
   }
 
   @Builder
-  public Token(String userId, String refreshToken)
+  public RefreshToken(String userId, String refreshToken)
   {
     this.userId = userId;
     this.refreshToken = refreshToken;
