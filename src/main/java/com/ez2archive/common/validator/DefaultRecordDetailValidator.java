@@ -1,6 +1,7 @@
 package com.ez2archive.common.validator;
 
 import com.ez2archive.entity.Grade;
+import com.ez2archive.entity.Record;
 import com.ez2archive.entity.RecordDetail;
 
 public class DefaultRecordDetailValidator implements Validator<RecordDetail>
@@ -8,9 +9,23 @@ public class DefaultRecordDetailValidator implements Validator<RecordDetail>
   @Override
   public boolean isValid(RecordDetail recordDetail)
   {
-    return isValidScore(recordDetail.getScore(), recordDetail.getRecord().getMusic().getBestScore())
-      && isBadgeValid(recordDetail.isAllCool(), recordDetail.isNoMiss())
-      && isGradeValid(recordDetail.getGrade());
+    return isValidRecord(recordDetail.getRecord())
+      && isValidMusicInfoId(recordDetail.getMusicInfoId(), recordDetail.getRecord().getMusic().getId())
+      && isValidScore(recordDetail.getScore(), recordDetail.getRecord().getMusic().getBestScore())
+      && isValidBadge(recordDetail.isAllCool(), recordDetail.isNoMiss())
+      && isValidPercentage(recordDetail.getPercentage())
+      && isValidGrade(recordDetail.getGrade());
+  }
+
+  private boolean isValidRecord(Record record)
+  {
+    return record != null
+      && record.getMusic() != null;
+  }
+
+  private boolean isValidMusicInfoId(Long musicInfoId, Long id)
+  {
+    return musicInfoId.equals(id);
   }
 
   private boolean isValidScore(int score, int bestScore)
@@ -19,7 +34,13 @@ public class DefaultRecordDetailValidator implements Validator<RecordDetail>
       && (score >= Grade.F.score());
   }
 
-  private boolean isBadgeValid(boolean allCool, boolean noMiss)
+  private boolean isValidPercentage(float percentage)
+  {
+    return percentage <= 100f
+      && percentage >= 50f;
+  }
+
+  private boolean isValidBadge(boolean allCool, boolean noMiss)
   {
     if(allCool)
     {
@@ -28,7 +49,7 @@ public class DefaultRecordDetailValidator implements Validator<RecordDetail>
     return true;
   }
 
-  private boolean isGradeValid(Grade grade)
+  private boolean isValidGrade(Grade grade)
   {
     return grade != null;
   }

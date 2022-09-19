@@ -1,5 +1,7 @@
 package com.ez2archive.common.validator;
 
+import com.ez2archive.entity.KeyType;
+import com.ez2archive.entity.MusicDifficulty;
 import com.ez2archive.entity.MusicInfo;
 
 import java.time.LocalDateTime;
@@ -13,11 +15,29 @@ public class DefaultMusicInfoValidator implements Validator<MusicInfo>
     // [WARN] 임의적인 로직 순서 변경 금지
     return isNameValid(musicInfo.getName())
       && isArtistValid(musicInfo.getArtist())
+      && isMusicDifficultyValid(musicInfo.getDifficulty())
+      && isCategoryValid(musicInfo.getCategory())
+      && isKeyTypeValid(musicInfo.getKeyType())
       && isLevelValid(musicInfo.getLevel())
       && isRankValid(musicInfo.getRank())
       && isTotalNoteValid(musicInfo.getTotalNote())
       && isBestScoreValid(musicInfo.getBestScore(), musicInfo.getTotalNote())
       && isAddTimeValid(musicInfo.getAddTime());
+  }
+
+  private boolean isKeyTypeValid(KeyType keyType)
+  {
+    return keyType != null;
+  }
+
+  private boolean isCategoryValid(String category)
+  {
+    return category != null;
+  }
+
+  private boolean isMusicDifficultyValid(MusicDifficulty difficulty)
+  {
+    return difficulty != null;
   }
 
   private boolean isNameValid(String name)
@@ -42,7 +62,7 @@ public class DefaultMusicInfoValidator implements Validator<MusicInfo>
 
   private boolean isTotalNoteValid(int totalNote)
   {
-    return totalNote >= 0;
+    return totalNote > 0;
   }
 
   private boolean isBestScoreValid(int bestScore, int totalNote)

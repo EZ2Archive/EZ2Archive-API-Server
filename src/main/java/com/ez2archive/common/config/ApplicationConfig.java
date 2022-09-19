@@ -26,7 +26,7 @@ public class ApplicationConfig
   public Validator<MusicInfo> musicInfoValidator() { return new DefaultMusicInfoValidator(); }
 
   @Bean
-  public Validator<RankSurvey> rankValidator() { return new DefaultRankValidator();}
+  public Validator<RankSurvey> rankValidator() { return new DefaultRankSurveyValidator();}
 
   @Bean
   public Validator<RequestLoginDTO> loginValidator() { return new DefaultLoginValidator(); }
