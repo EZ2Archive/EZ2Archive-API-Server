@@ -84,7 +84,7 @@ public class AchievementService
     recordDetail.setPercentage( Math.round(((float)recordDetail.getScore() / findMusicInfo.getBestScore() * 100f) * 1000f) / 1000f );
     recordDetail.setAddTime(LocalDateTime.now());
     recordDetail.setGrade( Grade.of(recordDetail.getScore()) );
-    recordDetail.setPoint( tierHandler.getPointAsScore(keyType, findMusicInfo.getBestScore(), findMusicInfo.getLevel(), recordDetail.getScore()) );
+    recordDetail.setPoint( tierHandler.getTierPointAsScore(keyType, findMusicInfo.getBestScore(), findMusicInfo.getLevel(), recordDetail.getScore()) );
 
     Record findBeforeRecord = recordRepository.findTopByMemberAndMusicOrderByAddTimeDesc(findMember, findMusicInfo)
       .orElseGet( Record::new );
@@ -131,35 +131,6 @@ public class AchievementService
   // ======================================================== PRIVATE ========================================================
   // =========================================================================================================================
 
-  /**
-   * 현재 티어를 갱신
-   */
-  private void updateTier(Member member, KeyType keyType) throws IllegalStateException
-  {
-    final double totalPoint = dtoRepository.findTop50RecordDetailDTOsByMemberAndKeyType(member, keyType)
-      .stream()
-      .map(RecordDetailDTO::getPoint)
-      .reduce(Double::sum)
-      .orElseThrow(IllegalStateException::new);
-    final double changePoint = tierHandler.getChangePoint(keyType, totalPoint);
-
-    Tier findTier = tierRepository.findTierByMemberAndKeyType(member, keyType)
-      .orElseGet( () ->
-        Tier.builder()
-          .member(member)
-          .keyType(keyType)
-          .addTime(LocalDateTime.now())
-          .build()
-      );
-    findTier.setTotalPoint(totalPoint);
-    findTier.setChangePoint(changePoint);
-    findTier.setTierGrade( tierHandler.getCurrentGrade(changePoint) );
-    findTier.setUntilNextTier( tierHandler.getPointUntilNextTier(changePoint) );
-    findTier.setLastModifyTime(LocalDateTime.now());
-
-    tierRepository.save(findTier);
-  }
-
   public AchieveDetailDTO findAchievementDetail(String userId, Long musicInfoId)
   {
     Member findMember = memberRepository.findByUserId(userId)
@@ -187,5 +158,34 @@ public class AchievementService
       .avgScore(tierAverage.getAverageScore())
       .avgTierPoint(tierAverage.getAveragePoint())
       .build();
+  }
+
+  /**
+   * 현재 티어를 갱신
+   */
+  private void updateTier(Member member, KeyType keyType) throws IllegalStateException
+  {
+    final double totalPoint = dtoRepository.findTop50RecordDetailDTOsByMemberAndKeyType(member, keyType)
+      .stream()
+      .map(RecordDetailDTO::getPoint)
+      .reduce(Double::sum)
+      .orElseThrow(IllegalStateException::new);
+    final double changePoint = tierHandler.getChangePoint(keyType, totalPoint);
+
+    Tier findTier = tierRepository.findTierByMemberAndKeyType(member, keyType)
+      .orElseGet( () ->
+        Tier.builder()
+          .member(member)
+          .keyType(keyType)
+          .addTime(LocalDateTime.now())
+          .build()
+      );
+    findTier.setTotalPoint(totalPoint);
+    findTier.setChangePoint(changePoint);
+    findTier.setTierGrade( tierHandler.getCurrentGrade(changePoint) );
+    findTier.setUntilNextTier( tierHandler.getPointUntilNextTier(changePoint) );
+    findTier.setLastModifyTime(LocalDateTime.now());
+
+    tierRepository.save(findTier);
   }
 }

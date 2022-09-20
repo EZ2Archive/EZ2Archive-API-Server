@@ -4,7 +4,7 @@ import com.ez2archive.entity.KeyType;
 
 public interface TierHandler<T>
 {
-  double getPointAsScore(KeyType keyType, int bestScore, int level, int score);
+  double getTierPointAsScore(KeyType keyType, int bestScore, int level, int score);
 
   double getChangePoint(KeyType keyType, double totalPoint);
 
