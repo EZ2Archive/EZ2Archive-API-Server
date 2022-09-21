@@ -15,13 +15,13 @@ import java.security.SecureRandom;
 @Configuration
 public class SecurityConfig
 {
-  @Value("${spring.security.hash.algorithm}")
+  @Value("${spring.security.custom.hash.algorithm}")
   private String HASH_ALGORITHM;
 
-  @Value("${spring.security.email.salt}")
+  @Value("${spring.security.custom.email.salt}")
   private String EMAIL_SALT;
 
-  @Value("${spring.security.jwt.secret-key}")
+  @Value("${spring.security.custom.jwt.secret-key}")
   protected String TOKEN_SECRET_KEY;
 
   @Bean
