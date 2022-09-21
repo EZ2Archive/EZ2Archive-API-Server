@@ -9,21 +9,19 @@ import com.ez2archive.common.handler.crypt.PasswordCryptHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 
 import java.security.SecureRandom;
 
 @Configuration
-@PropertySource("classpath:security.properties")
 public class SecurityConfig
 {
-  @Value("${ez2archive.security.hash.algorithm}")
+  @Value("${spring.security.hash.algorithm}")
   private String HASH_ALGORITHM;
 
-  @Value("${ez2archive.security.email.salt}")
+  @Value("${spring.security.email.salt}")
   private String EMAIL_SALT;
 
-  @Value("${ez2archive.security.jwt.secret-key}")
+  @Value("${spring.security.jwt.secret-key}")
   protected String TOKEN_SECRET_KEY;
 
   @Bean

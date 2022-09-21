@@ -3,6 +3,9 @@ package com.ez2archive.common.auth;
 import com.ez2archive.common.exception.auth.AuthenticationException;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -10,6 +13,7 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
+@Slf4j
 @RequiredArgsConstructor
 public class JwtTokenProvider implements TokenProvider<String, JwtToken>
 {
@@ -49,6 +53,8 @@ public class JwtTokenProvider implements TokenProvider<String, JwtToken>
   @Override
   public String issueAccessToken(String userId)
   {
+    if(userId == null || userId.isEmpty()) throw new UnsupportedOperationException();
+
     final LocalDateTime nowTime = LocalDateTime.now();
     final LocalDateTime accessExpireTime = nowTime.plus(EXPIRE_ACCESS_TOKEN_AMOUNT, EXPIRE_UNIT);
 
@@ -63,6 +69,8 @@ public class JwtTokenProvider implements TokenProvider<String, JwtToken>
   @Override
   public String issueRefreshToken(String userId)
   {
+    if(userId == null || userId.isEmpty()) throw new UnsupportedOperationException();
+
     final LocalDateTime nowTime = LocalDateTime.now();
     final LocalDateTime refreshExpireTime = nowTime.plus(EXPIRE_REFRESH_TOKEN_AMOUNT, EXPIRE_UNIT);
 
@@ -93,16 +101,32 @@ public class JwtTokenProvider implements TokenProvider<String, JwtToken>
     {
       Jwts.parser()
         .setSigningKey(secretKey)
-        .parseClaimsJws(token.getAccessToken());
+        .parseClaimsJws(token.getAccessToken())
+        .getBody();
       return true;
     }
     catch( ExpiredJwtException e )
     {
       throw new AuthenticationException("만료된 토큰입니다.");
     }
+    catch( SignatureException e )
+    {
+      final HttpServletRequest request;
+      try
+      {
+        request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        log.warn("Detected validation of tampered tokens from : " + request.getRemoteAddr() + ":" + token.getAccessToken());
+      }
+      catch(IllegalStateException e1)
+      {
+        // 서블릿으로 HttpServletRequest 인스턴스를 조회하지 못했을 경우, 해당 케이스는 테스트 케이스로 간주. 예외를 무시한다.
+      }
+      throw new AuthenticationException("잘못된 서명의 토큰입니다.");
+    }
     catch( JwtException e )
     {
       throw new AuthenticationException("유효하지 않은 토큰입니다.");
     }
+
   }
 }
