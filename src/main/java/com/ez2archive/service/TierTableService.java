@@ -7,7 +7,7 @@ import com.ez2archive.entity.KeyType;
 import com.ez2archive.entity.Member;
 import com.ez2archive.entity.Tier;
 import com.ez2archive.entity.TierGrade;
-import com.ez2archive.repository.DTORepository;
+import com.ez2archive.repository.DtoRepository;
 import com.ez2archive.repository.MemberRepository;
 import com.ez2archive.repository.TierRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class TierTableService
 {
   private final MemberRepository memberRepository;
   private final TierRepository tierRepository;
-  private final DTORepository dtoRepository;
+  private final DtoRepository dtoRepository;
 
   public TierInfoDTO findTierInfo(String userId, KeyType keyType)
   {

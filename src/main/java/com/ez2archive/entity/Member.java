@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -50,14 +51,14 @@ public class Member
   private MemberAuthority authority;
 
   /** 이메일 */
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "email_id")
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JoinColumn(name = "email_id", nullable = false)
   @JsonIgnore
   private Email email;
 
   @OneToMany(mappedBy = "member")
-  @ApiModelProperty(hidden = true)
-  private List<Record> recordList = new ArrayList<>();
+  @JsonIgnore
+  private List<Tier> tiers = new ArrayList<>();
 
   /** 사용자 생성 시각 */
   @Column(nullable = false)
@@ -66,4 +67,21 @@ public class Member
   @ApiModelProperty(hidden = true)
   private LocalDateTime addTime;
 
+  public Member()
+  {
+  }
+
+  @Builder
+  public Member(Long id, String userId, String password, Long salt, String name, MemberAuthority authority, Email email, List<Tier> tiers, LocalDateTime addTime)
+  {
+    this.id = id;
+    this.userId = userId;
+    this.password = password;
+    this.salt = salt;
+    this.name = name;
+    this.authority = authority;
+    this.email = email;
+    this.tiers = tiers;
+    this.addTime = addTime;
+  }
 }

@@ -100,7 +100,7 @@ public class DefaultTierHandler implements TierHandler<TierGrade>
       Map.entry( 2,  20),
       Map.entry( 1,  10)
     )
-  );;
+  );
 
 
   /**
@@ -115,7 +115,7 @@ public class DefaultTierHandler implements TierHandler<TierGrade>
    * @return 소수점 세 자리에서 반올림한 티어 포인트를 반환한다.
    */
   @Override
-  public double getPointAsScore(KeyType keyType, int bestScore, int level, int score)
+  public double getTierPointAsScore(KeyType keyType, int bestScore, int level, int score)
   {
     int maxPoint = pointMap.get(keyType).get(level);
 
@@ -144,7 +144,7 @@ public class DefaultTierHandler implements TierHandler<TierGrade>
       default:
         throw new IllegalValueException("잘못된 키 타입 정보입니다");
     }
-    return round(result * 1000) / 1000;
+    return round(result * 1000d) / 1000d;
   }
 
   @Override

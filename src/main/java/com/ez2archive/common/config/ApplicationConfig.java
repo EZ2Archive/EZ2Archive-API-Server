@@ -1,6 +1,8 @@
 package com.ez2archive.common.config;
 
 import com.ez2archive.common.validator.*;
+import com.ez2archive.dto.auth.RequestLoginDTO;
+import com.ez2archive.dto.auth.RequestSignUpDTO;
 import com.ez2archive.entity.*;
 import com.ez2archive.handler.DefaultTierHandler;
 import com.ez2archive.handler.TierHandler;
@@ -15,7 +17,7 @@ public class ApplicationConfig
   public JpaResultMapper jpaResultMapper() { return new JpaResultMapper(); }
 
   @Bean
-  public Validator<Member> memberValidator() { return new DefaultMemberValidator(); }
+  public Validator<RequestSignUpDTO> signUpValidator() { return new DefaultSignUpValidator(); }
 
   @Bean
   public Validator<RecordDetail> recordDetailValidator() { return new DefaultRecordDetailValidator(); }
@@ -24,10 +26,10 @@ public class ApplicationConfig
   public Validator<MusicInfo> musicInfoValidator() { return new DefaultMusicInfoValidator(); }
 
   @Bean
-  public Validator<Email> emailValidator() { return new DefaultEmailValidator(); }
+  public Validator<RankSurvey> rankValidator() { return new DefaultRankSurveyValidator();}
 
   @Bean
-  public Validator<RankSurvey> rankValidator() { return new DefaultRankValidator();}
+  public Validator<RequestLoginDTO> loginValidator() { return new DefaultLoginValidator(); }
 
   @Bean
   public TierHandler<TierGrade> tierHandler() { return new DefaultTierHandler(); }

@@ -18,11 +18,8 @@ public class AchieveDTO
 
   private int score;
 
-  private double avgScore;
-
   private double point;
 
-  private double avgPoint;
 
   private double percentage;
 
@@ -43,37 +40,35 @@ public class AchieveDTO
 
   public AchieveDTO(){}
 
-  public AchieveDTO(Long recordId, Long musicInfoId, String name, int score, Double avgScore, Double point, Double avgPoint, Double percentage, int rank, String difficulty, String grade, boolean isAllCool, boolean isNoMiss)
+  public AchieveDTO(Long recordId, Long musicInfoId, String name, int score, double point, double percentage, int rank, String difficulty, String grade, boolean isAllCool, boolean isNoMiss)
   {
-    this.recordId     = recordId;
-    this.musicInfoId  = musicInfoId;
-    this.name         = name;
-    this.score        = score;
-    this.avgScore     = avgScore;
-    this.point        = point;
-    this.avgPoint     = avgPoint;
-    this.percentage   = percentage;
-    this.rank         = rank;
-    this.difficulty   = difficulty;
-    this.grade        = grade;
-    this.isAllCool    = isAllCool;
-    this.isNoMiss     = isNoMiss;
+    this.recordId = recordId;
+    this.musicInfoId = musicInfoId;
+    this.name = name;
+    this.score = score;
+    this.point = point;
+    this.percentage = percentage;
+    this.rank = rank;
+    this.difficulty = difficulty;
+    this.grade = grade;
+    this.isAllCool = isAllCool;
+    this.isNoMiss = isNoMiss;
   }
 
   /**
    * QLRM 전용 생성자 (H2)
    */
-  public AchieveDTO(BigInteger recordId, BigInteger musicInfoId, String name, int score, Double avgScore, Double point, Double avgPoint, Double percentage, int rank, String difficulty, String grade, boolean isAllCool, boolean isNoMiss)
+  public AchieveDTO(BigInteger recordId, BigInteger musicInfoId, String name, int score, Double point, Double percentage, int rank, String difficulty, String grade, boolean isAllCool, boolean isNoMiss)
   {
-    this(recordId.longValue(), musicInfoId.longValue(), name, score, avgScore, point, avgPoint, percentage, rank, difficulty, grade, isAllCool, isNoMiss);
+    this(recordId.longValue(), musicInfoId.longValue(), name, score, point, percentage, rank, difficulty, grade, isAllCool, isNoMiss);
   }
 
   /**
    * QLRM 전용 생성자 (MySQL)
    */
-  public AchieveDTO(BigInteger recordId, BigInteger musicInfoId, String name, BigInteger score, BigInteger avgScore, Double point, BigInteger avgPoint, Float percentage, int rank, String difficulty, String grade, BigDecimal isAllCool, BigDecimal isNoMiss)
+  public AchieveDTO(BigInteger recordId, BigInteger musicInfoId, String name, BigInteger score, Double point, Float percentage, int rank, String difficulty, String grade, BigDecimal isAllCool, BigDecimal isNoMiss)
   {
-    this(recordId.longValue(), musicInfoId.longValue(), name, score.intValue(), avgScore.doubleValue(), point, avgPoint.doubleValue(), percentage.doubleValue(), rank, difficulty, grade, isAllCool.intValue() > 0, isNoMiss.intValue() > 0);
+    this(recordId.longValue(), musicInfoId.longValue(), name, score.intValue(), point, percentage.doubleValue(), rank, difficulty, grade, isAllCool.intValue() > 0, isNoMiss.intValue() > 0);
   }
 
 }

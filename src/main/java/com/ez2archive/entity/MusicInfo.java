@@ -1,19 +1,17 @@
 package com.ez2archive.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 음원 정보 엔티티 클래스
@@ -74,11 +72,6 @@ public class MusicInfo
   /** 음원 노트 수 합계 */
   private int totalNote;
 
-  @OneToMany(mappedBy = "music")
-  @JsonIgnore
-  @ApiModelProperty(hidden = true)
-  private List<Record> recordList = new ArrayList<>();
-
   /** 음원 추가 시각 */
   @Column(nullable = false)
   @JsonSerialize(using = LocalDateTimeSerializer.class)
@@ -91,4 +84,24 @@ public class MusicInfo
   @Lob
   private String description;
 
+  public MusicInfo()
+  {
+  }
+
+  @Builder
+  public MusicInfo(Long id, String name, String artist, KeyType keyType, MusicDifficulty difficulty, String category, int level, int rank, int bestScore, int totalNote, LocalDateTime addTime, String description)
+  {
+    this.id = id;
+    this.name = name;
+    this.artist = artist;
+    this.keyType = keyType;
+    this.difficulty = difficulty;
+    this.category = category;
+    this.level = level;
+    this.rank = rank;
+    this.bestScore = bestScore;
+    this.totalNote = totalNote;
+    this.addTime = addTime;
+    this.description = description;
+  }
 }

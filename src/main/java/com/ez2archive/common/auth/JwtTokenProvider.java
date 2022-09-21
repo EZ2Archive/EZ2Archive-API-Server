@@ -2,7 +2,10 @@ package com.ez2archive.common.auth;
 
 import com.ez2archive.common.exception.auth.AuthenticationException;
 import io.jsonwebtoken.*;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -10,15 +13,17 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
+@Slf4j
+@RequiredArgsConstructor
 public class JwtTokenProvider implements TokenProvider<String, JwtToken>
 {
-  @Value("${ez2archive.security.jwt.secret-key}")
-  private String SECRET_KEY;
+  private final String secretKey;
 
-  public static final String AUTH_IDENTIFIER = "Authorization";
-  public static final String TOKEN_TYPE = "Bearer";
+  private final static int EXPIRE_ACCESS_TOKEN_AMOUNT = 10_080;
 
-  private static final int EXPIRED_TIME = 2;
+  private final static int EXPIRE_REFRESH_TOKEN_AMOUNT = 20_160; // 2 weeks
+
+  private final static ChronoUnit EXPIRE_UNIT = ChronoUnit.MINUTES;
 
   @Override
   public JwtToken getToken(HttpServletRequest request)
@@ -30,9 +35,12 @@ public class JwtTokenProvider implements TokenProvider<String, JwtToken>
 
     try
     {
-      auths = request.getHeader(AUTH_IDENTIFIER).split(" ");
+      auths = request.getHeader("Authorization").split(" ");
 
-      result = new JwtToken(auths[0], auths[1]);
+      result = JwtToken.builder()
+        .type(auths[0])
+        .accessToken(auths[1])
+        .build();
     }
     catch(NullPointerException | ArrayIndexOutOfBoundsException e)
     {
@@ -43,27 +51,43 @@ public class JwtTokenProvider implements TokenProvider<String, JwtToken>
   }
 
   @Override
-  public JwtToken issue(String userId)
+  public String issueAccessToken(String userId)
   {
-    final LocalDateTime now = LocalDateTime.now();
-    final LocalDateTime expired = now.plus(EXPIRED_TIME, ChronoUnit.HOURS);
+    if(userId == null || userId.isEmpty()) throw new UnsupportedOperationException();
 
-    final String token = Jwts.builder()
-      .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+    final LocalDateTime nowTime = LocalDateTime.now();
+    final LocalDateTime accessExpireTime = nowTime.plus(EXPIRE_ACCESS_TOKEN_AMOUNT, EXPIRE_UNIT);
+
+    return Jwts.builder()
+      .signWith(SignatureAlgorithm.HS512, secretKey)
       .setSubject(userId)
-      .setIssuedAt( Date.from(now.atZone(ZoneId.systemDefault()).toInstant()) )
-      .setExpiration( Date.from(expired.atZone(ZoneId.systemDefault()).toInstant()) )
+      .setIssuedAt( Date.from(nowTime.atZone(ZoneId.systemDefault()).toInstant()) )
+      .setExpiration( Date.from(accessExpireTime.atZone(ZoneId.systemDefault()).toInstant()) )
       .compact();
+  }
 
-    return new JwtToken(TOKEN_TYPE, token);
+  @Override
+  public String issueRefreshToken(String userId)
+  {
+    if(userId == null || userId.isEmpty()) throw new UnsupportedOperationException();
+
+    final LocalDateTime nowTime = LocalDateTime.now();
+    final LocalDateTime refreshExpireTime = nowTime.plus(EXPIRE_REFRESH_TOKEN_AMOUNT, EXPIRE_UNIT);
+
+    return Jwts.builder()
+      .signWith(SignatureAlgorithm.HS512, secretKey)
+      .setSubject(userId)
+      .setIssuedAt( Date.from(nowTime.atZone(ZoneId.systemDefault()).toInstant()) )
+      .setExpiration( Date.from(refreshExpireTime.atZone(ZoneId.systemDefault()).toInstant()) )
+      .compact();
   }
 
   @Override
   public String getIdFromToken(JwtToken token)
   {
     final Claims claims = Jwts.parser()
-      .setSigningKey(SECRET_KEY)
-      .parseClaimsJws(token.getToken())
+      .setSigningKey(secretKey)
+      .parseClaimsJws(token.getAccessToken())
       .getBody();
 
     return claims.getSubject();
@@ -76,17 +100,33 @@ public class JwtTokenProvider implements TokenProvider<String, JwtToken>
     try
     {
       Jwts.parser()
-        .setSigningKey(SECRET_KEY)
-        .parseClaimsJws(token.getToken());
+        .setSigningKey(secretKey)
+        .parseClaimsJws(token.getAccessToken())
+        .getBody();
       return true;
     }
     catch( ExpiredJwtException e )
     {
       throw new AuthenticationException("만료된 토큰입니다.");
     }
+    catch( SignatureException e )
+    {
+      final HttpServletRequest request;
+      try
+      {
+        request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        log.warn("Detected validation of tampered tokens from : " + request.getRemoteAddr() + ":" + token.getAccessToken());
+      }
+      catch(IllegalStateException e1)
+      {
+        // 서블릿으로 HttpServletRequest 인스턴스를 조회하지 못했을 경우, 해당 케이스는 테스트 케이스로 간주. 예외를 무시한다.
+      }
+      throw new AuthenticationException("잘못된 서명의 토큰입니다.");
+    }
     catch( JwtException e )
     {
       throw new AuthenticationException("유효하지 않은 토큰입니다.");
     }
+
   }
 }

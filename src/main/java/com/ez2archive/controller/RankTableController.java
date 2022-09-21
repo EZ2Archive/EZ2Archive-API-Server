@@ -27,7 +27,7 @@ public class RankTableController
   private final TokenProvider<String, JwtToken> tokenProvider;
 
   @Operation(summary = "서열표 목록 조회")
-  @RequestMapping(method = RequestMethod.GET, value = "/{keyType}")
+  @RequestMapping(method = RequestMethod.GET, value = "/list/{keyType}")
   public ResponseEntity<CommonResponse<List<MusicInfo>>> rankGet(@PathVariable KeyType keyType)
   {
     List<MusicInfo> musicInfoList = musicInfoService.getRankTableListByKeyType(keyType);
@@ -38,7 +38,7 @@ public class RankTableController
   }
 
   @Operation(summary = "서열표 목록 조회")
-  @RequestMapping(method = RequestMethod.GET, value = "/{keyType}/{level}")
+  @RequestMapping(method = RequestMethod.GET, value = "/list/{keyType}/{level}")
   public ResponseEntity<CommonResponse<List<MusicInfo>>> rankGet(@PathVariable KeyType keyType, @PathVariable int level)
   {
     List<MusicInfo> musicInfoList = musicInfoService.getRankTableListByKeyTypeAndLevel(keyType, level);
