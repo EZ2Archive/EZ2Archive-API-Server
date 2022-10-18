@@ -1,5 +1,6 @@
 package com.ez2archive.common.validator;
 
+import com.ez2archive.common.condition.CommonCondition;
 import com.ez2archive.dto.auth.RequestSignUpDTO;
 
 import java.util.regex.Pattern;
@@ -13,7 +14,7 @@ public class DefaultSignUpValidator implements Validator<RequestSignUpDTO>
   public boolean isValid(RequestSignUpDTO dto)
   {
     return isIdValid(dto.getUserId())
-      && isPwdValid(dto.getPassword())
+      && isPasswordValid(dto.getPassword())
       && isNameValid(dto.getName())
       && isEmailValid(dto.getEmail());
   }
@@ -25,11 +26,9 @@ public class DefaultSignUpValidator implements Validator<RequestSignUpDTO>
       && ID_REG_EXP.matcher( userId ).matches();
   }
 
-  private boolean isPwdValid(String password)
+  private boolean isPasswordValid(String password)
   {
-    return password != null
-      && password.length() > 5
-      && password.length() <= 500;
+    return CommonCondition.isPasswordValid(password);
   }
 
   private boolean isNameValid(String name)

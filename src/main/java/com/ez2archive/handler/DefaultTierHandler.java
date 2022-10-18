@@ -1,151 +1,72 @@
 package com.ez2archive.handler;
 
-import com.ez2archive.common.exception.business.IllegalValueException;
 import com.ez2archive.entity.KeyType;
 import com.ez2archive.entity.TierGrade;
+import com.ez2archive.repository.MusicInfoRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-import static java.lang.Math.*;
+import static java.lang.Math.pow;
+import static java.lang.Math.round;
 
+@RequiredArgsConstructor
+@Component
 public class DefaultTierHandler implements TierHandler<TierGrade>
 {
+  private final MusicInfoRepository musicInfoRepository;
 
-  private final Map<KeyType, Map<Integer, Integer>> pointMap = Map.of(
-    KeyType.FOUR,  Map.ofEntries(
-      Map.entry(20, 300),
-      Map.entry(19, 300),
-      Map.entry(18, 260),
-      Map.entry(17, 225),
-      Map.entry(16, 200),
-      Map.entry(15, 180),
-      Map.entry(14, 160),
-      Map.entry(13, 140),
-      Map.entry(12, 130),
-      Map.entry(11, 120),
-      Map.entry(10, 110),
-      Map.entry( 9, 100),
-      Map.entry( 8,  90),
-      Map.entry( 7,  80),
-      Map.entry( 6,  70),
-      Map.entry( 5,  60),
-      Map.entry( 4,  50),
-      Map.entry( 3,  40),
-      Map.entry( 2,  30),
-      Map.entry( 1,  20)
-    ),
-    KeyType.FIVE,  Map.ofEntries(
-      Map.entry(20, 300),
-      Map.entry(19, 260),
-      Map.entry(18, 225),
-      Map.entry(17, 200),
-      Map.entry(16, 180),
-      Map.entry(15, 160),
-      Map.entry(14, 140),
-      Map.entry(13, 130),
-      Map.entry(12, 120),
-      Map.entry(11, 110),
-      Map.entry(10, 100),
-      Map.entry( 9,  90),
-      Map.entry( 8,  80),
-      Map.entry( 7,  70),
-      Map.entry( 6,  60),
-      Map.entry( 5,  50),
-      Map.entry( 4,  40),
-      Map.entry( 3,  30),
-      Map.entry( 2,  20),
-      Map.entry( 1,  10)
-    ),
-    KeyType.SIX,   Map.ofEntries(
-      Map.entry(20, 300),
-      Map.entry(19, 260),
-      Map.entry(18, 225),
-      Map.entry(17, 200),
-      Map.entry(16, 180),
-      Map.entry(15, 160),
-      Map.entry(14, 140),
-      Map.entry(13, 130),
-      Map.entry(12, 120),
-      Map.entry(11, 110),
-      Map.entry(10, 100),
-      Map.entry( 9,  90),
-      Map.entry( 8,  80),
-      Map.entry( 7,  70),
-      Map.entry( 6,  60),
-      Map.entry( 5,  50),
-      Map.entry( 4,  40),
-      Map.entry( 3,  30),
-      Map.entry( 2,  20),
-      Map.entry( 1,  10)
-    ),
-    KeyType.EIGHT, Map.ofEntries(
-      Map.entry(20, 300),
-      Map.entry(19, 260),
-      Map.entry(18, 225),
-      Map.entry(17, 200),
-      Map.entry(16, 180),
-      Map.entry(15, 160),
-      Map.entry(14, 140),
-      Map.entry(13, 130),
-      Map.entry(12, 120),
-      Map.entry(11, 110),
-      Map.entry(10, 100),
-      Map.entry( 9,  90),
-      Map.entry( 8,  80),
-      Map.entry( 7,  70),
-      Map.entry( 6,  60),
-      Map.entry( 5,  50),
-      Map.entry( 4,  40),
-      Map.entry( 3,  30),
-      Map.entry( 2,  20),
-      Map.entry( 1,  10)
-    )
+  /**
+   * 레벨별 포인트 가중치
+   */
+  private final Map<Integer, Integer> pointMap = Map.ofEntries(
+    Map.entry(20, 300),
+    Map.entry(19, 260),
+    Map.entry(18, 225),
+    Map.entry(17, 200),
+    Map.entry(16, 180),
+    Map.entry(15, 160),
+    Map.entry(14, 140),
+    Map.entry(13, 130),
+    Map.entry(12, 120),
+    Map.entry(11, 110),
+    Map.entry(10, 100),
+    Map.entry( 9,  90),
+    Map.entry( 8,  80),
+    Map.entry( 7,  70),
+    Map.entry( 6,  60),
+    Map.entry( 5,  50),
+    Map.entry( 4,  40),
+    Map.entry( 3,  30),
+    Map.entry( 2,  20),
+    Map.entry( 1,  10)
   );
 
 
-  /**
-   * <p>
-   *   - 득점 점수 포인트 환산식
-   *   - (100 * (score / bestScore) - 55) ^ 1.209765825 / maxPoint / 100
-   * </p>
-   * @param keyType 키 타입(4Key, 5Key, ...)
-   * @param bestScore 해당 음원에서 가능한 최고점수
-   * @param level 해당 음원의 레벨
-   * @param score 사용자 득점 점수
-   * @return 소수점 세 자리에서 반올림한 티어 포인트를 반환한다.
-   */
   @Override
   public double getTierPointAsScore(KeyType keyType, int bestScore, int level, int score)
   {
-    int maxPoint = pointMap.get(keyType).get(level);
-
-    return round((pow(( 100d * ((double)score / bestScore) - 55d ), 1.209765825d) / 100 * maxPoint) * 1000) / 1000d;
+    return round((pow(( 100d * ((double)score / bestScore) - 55d ), 1.209765825d) / 100 * pointMap.get(level)) * 1000) / 1000d;
   }
+
 
   @Override
   public double getChangePoint(KeyType keyType, double totalPoint)
   {
-    double result;
+    // 
+    final double exchangeConstant = musicInfoRepository.findMusicInfosByKeyTypeOrderByLevelDesc(keyType, Pageable.ofSize(50))
+      .stream()
+      .map(musicInfo -> pointMap.get(musicInfo.getLevel()))
+      .reduce(Integer::sum)
+      .orElseThrow(() -> new IllegalStateException("음원 포읹트 정보가 존재하지 않습니다.")) / 10_000d;
 
-    switch(keyType)
-    {
-      case FOUR:
-        result = totalPoint / 1.2625d;
-        break;
-      case FIVE:
-        result = totalPoint / 1.2965d;
-        break;
-      case SIX:
-        result = totalPoint / 1.308d;
-        break;
-      case EIGHT:
-        result = totalPoint / 1.3d;
-        break;
-      default:
-        throw new IllegalValueException("잘못된 키 타입 정보입니다");
-    }
+    final double result = totalPoint / exchangeConstant;
+
     return round(result * 1000d) / 1000d;
   }
+
 
   @Override
   public TierGrade getCurrentGrade(double changePoint)
@@ -162,6 +83,7 @@ public class DefaultTierHandler implements TierHandler<TierGrade>
     }
     return result;
   }
+
 
   @Override
   public double getPointUntilNextTier(double changePoint)
@@ -180,12 +102,6 @@ public class DefaultTierHandler implements TierHandler<TierGrade>
     }
 
     return round((nextScore - changePoint) * 1000d) / 1000d;
-  }
-
-  @Override
-  public int getPoint(KeyType keyType, int level)
-  {
-    return this.pointMap.get(keyType).get(level);
   }
 
 }

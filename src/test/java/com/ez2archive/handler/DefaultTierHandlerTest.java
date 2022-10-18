@@ -1,21 +1,35 @@
 package com.ez2archive.handler;
 
 import com.ez2archive.entity.*;
+import com.ez2archive.repository.MusicInfoRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+@ExtendWith(MockitoExtension.class)
 class DefaultTierHandlerTest
 {
-  private TierHandler<TierGrade> tierHandler;
+  @Mock
+  private MusicInfoRepository musicInfoRepository;
+
+  @InjectMocks
+  private DefaultTierHandler tierHandler;
 
   @BeforeEach
   void init()
   {
-    tierHandler = new DefaultTierHandler();
+    tierHandler = new DefaultTierHandler(musicInfoRepository);
   }
 
   @DisplayName("tierPoint 계산 케이스")
@@ -37,7 +51,7 @@ class DefaultTierHandlerTest
     final int score = 1_100_432;
 
     // When
-    final double expected = 299.013d;
+    final double expected = 259.144d;
     final double actual = tierHandler.getTierPointAsScore(musicInfo.getKeyType(), musicInfo.getBestScore(), musicInfo.getLevel(), score);
 
     // Then
@@ -52,11 +66,16 @@ class DefaultTierHandlerTest
     final Member member = Member.builder().build();
     final KeyType keyType = KeyType.FOUR;
 
-    final double totalPoint = 12016.460999999998d;
-
+    final double totalPoint = 9891d;
 
     // When
-    final double expected = 9517.0d;
+    List<MusicInfo> musicInfoList = IntStream.range(0,9).mapToObj(value -> MusicInfo.builder().level(19).build()).collect(Collectors.toList());
+    musicInfoList.addAll( IntStream.range(0,18).mapToObj(value -> MusicInfo.builder().level(18).build()).collect(Collectors.toList()) );
+    musicInfoList.addAll( IntStream.range(0,23).mapToObj(value -> MusicInfo.builder().level(17).build()).collect(Collectors.toList()) );
+    Mockito.when(musicInfoRepository.findMusicInfosByKeyTypeOrderByLevelDesc(Mockito.any(), Mockito.any()))
+      .thenReturn(musicInfoList);
+
+    final double expected = 9000;
     final double actual = tierHandler.getChangePoint(keyType, totalPoint);
 
     // Then
@@ -88,22 +107,6 @@ class DefaultTierHandlerTest
     // When
     final double expected = 83.0d;
     final double actual = tierHandler.getPointUntilNextTier(changePoint);
-
-    // Then
-    Assertions.assertEquals(expected, actual);
-  }
-
-  @DisplayName("포인트 점수 조회 케이스")
-  @Test
-  void getPoint()
-  {
-    // Given
-    final KeyType keyType = KeyType.FOUR;
-    final int level = 19;
-
-    // When
-    int expected = 300;
-    int actual = tierHandler.getPoint(keyType, level);
 
     // Then
     Assertions.assertEquals(expected, actual);

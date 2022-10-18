@@ -12,12 +12,13 @@ import com.ez2archive.dto.auth.RequestLoginDTO;
 import com.ez2archive.dto.auth.RequestSignUpDTO;
 import com.ez2archive.entity.*;
 import com.ez2archive.repository.EmailRepository;
-import com.ez2archive.repository.RefreshTokenRepository;
 import com.ez2archive.repository.LoginHistoryRepository;
 import com.ez2archive.repository.MemberRepository;
+import com.ez2archive.repository.RefreshTokenRepository;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.SecureRandom;
@@ -25,6 +26,7 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class LoginService
 {
   private final MemberRepository memberRepository;
@@ -42,6 +44,12 @@ public class LoginService
 
   private final SecureRandom sr;
 
+
+
+  /**
+   * 회원가입
+   */
+  @Transactional
   public void sinUp(RequestSignUpDTO dto)
   {
     // 사용자 양식 유효성 검사
@@ -74,6 +82,10 @@ public class LoginService
     memberRepository.save(member);
   }
 
+  /**
+   * 로그인
+   */
+  @Transactional
   public JwtToken login(HttpServletRequest request, RequestLoginDTO requestLoginDTO) throws InterruptedException
   {
     JwtToken jwtToken;
@@ -116,7 +128,7 @@ public class LoginService
         String refreshToken = tokenProvider.issueRefreshToken(userId);
 
         refreshTokenRepository.save(
-          Token.builder()
+          RefreshToken.builder()
             .userId(userId)
             .refreshToken(refreshToken)
             .build()
@@ -152,19 +164,4 @@ public class LoginService
     return memberRepository.findByUserId(userId).isPresent();
   }
 
-  public void passwordRe(String userId, String email)
-  {
-    Member findMember = memberRepository.findByUserId(userId)
-      .orElseThrow( () -> new AuthenticationException("해당 사용자의 이메일이 일치하지 않습니다.") );
-
-    String expectedAddress = emailCryptHandler.encode(email);
-    String actualAddress = findMember.getEmail().getAddress();
-
-    if( !expectedAddress.equals(actualAddress) ) throw new AuthenticationException("해당 사용자의 이메일이 일치하지 않습니다.");
-
-    // TODO --> 임시 패스워드 재설정 or 패스워드 재설정 form 양식 세팅
-    // TODO --> 이메일 발송
-
-    throw new UnsupportedOperationException("아직 구현되지 않은 기능입니다.");
-  }
 }

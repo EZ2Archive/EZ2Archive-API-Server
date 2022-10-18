@@ -1,6 +1,7 @@
 package com.ez2archive.controller;
 
 import com.ez2archive.common.response.CommonResponse;
+import com.ez2archive.dto.auth.RequestPasswordModifyDTO;
 import com.ez2archive.service.VerifyService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -34,10 +35,32 @@ public class VerifyController
   }
 
   @Operation(summary = "이메일 인증")
-  @RequestMapping(method = RequestMethod.GET, value="/{key}")
+  @RequestMapping(method = RequestMethod.GET, value="/email/{key}")
   public ResponseEntity<CommonResponse<?>> emailVerifyPatch(@PathVariable String key)
   {
     verifyService.verifyEmail(key);
+
+    return ResponseEntity.ok().body(
+      CommonResponse.success()
+    );
+  }
+
+  @Operation(summary = "패스워드 재설정 이메일 발송")
+  @RequestMapping(method = RequestMethod.POST, value = "/password/request")
+  public ResponseEntity<CommonResponse<?>> passwordRequest(@RequestParam String userId, @RequestParam String email)
+  {
+    verifyService.passwordRe(userId, email);
+
+    return ResponseEntity.ok().body(
+      CommonResponse.success()
+    );
+  }
+
+  @Operation(summary = "패스워드 재설정")
+  @RequestMapping(method = RequestMethod.PATCH, value="/password/modify")
+  public ResponseEntity<CommonResponse<?>> passwordModifyPatch(@RequestBody RequestPasswordModifyDTO dto)
+  {
+    verifyService.verifyPassword(dto);
 
     return ResponseEntity.ok().body(
       CommonResponse.success()
