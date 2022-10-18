@@ -36,6 +36,13 @@ public class Email
   @JsonDeserialize
   private LocalDateTime expireTime;
 
+  /** transient */
+  @JsonDeserialize
+  private static final int EXPIRE_AMOUNT = 30;
+  /** transient */
+  @JsonDeserialize
+  private static final ChronoUnit EXPIRE_UNIT = ChronoUnit.MINUTES;
+
   public Email()
   {
   }
@@ -51,8 +58,12 @@ public class Email
     this.expireTime = expireTime;
   }
 
+  public LocalDateTime getExpireTime()
+  {
+    return this.addTime.plus(EXPIRE_AMOUNT, EXPIRE_UNIT);
+  }
   public static LocalDateTime getExpireTime(LocalDateTime addTime)
   {
-    return addTime.plus(30, ChronoUnit.MINUTES);
+    return addTime.plus(EXPIRE_AMOUNT, EXPIRE_UNIT);
   }
 }
