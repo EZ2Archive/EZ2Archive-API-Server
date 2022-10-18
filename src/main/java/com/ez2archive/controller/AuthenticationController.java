@@ -59,16 +59,6 @@ public class AuthenticationController
     );
   }
 
-  @Operation(summary = "패스워드 재설정 이메일 발송")
-  @RequestMapping(method = RequestMethod.POST, value = "/passwordre")
-  public ResponseEntity<CommonResponse<?>> passwordRePost(@RequestParam String userId, @RequestParam String email)
-  {
-    loginService.passwordRe(userId, email);
-
-    // TODO --> 패스워드 재설정 이메일 발송 WIP
-    throw new UnsupportedOperationException();
-  }
-
   @Operation(summary = "[Required = [Refresh Token] 엑세스 토큰 연장 요청")
   @RequestMapping(method = RequestMethod.GET, value = "/poll")
   public ResponseEntity<CommonResponse<String>> pollGet(@ApiIgnore JwtToken jwtToken)
