@@ -1,8 +1,9 @@
-package com.ez2archive.controller;
+package com.ez2archive.controller.api;
 
 import com.ez2archive.common.aspect.RequiredAuthority;
 import com.ez2archive.common.response.CommonResponse;
 import com.ez2archive.common.swagger.ApiPageable;
+import com.ez2archive.dto.musicinfo.RequestMusicInfoUpdateDTO;
 import com.ez2archive.entity.KeyType;
 import com.ez2archive.entity.MemberAuthority;
 import com.ez2archive.entity.MusicInfo;
@@ -68,9 +69,9 @@ public class MusicInfoController
   @Operation(summary = "Required = [Token, authority.ADMIN] 음원 정보 수정")
   @RequestMapping(method = RequestMethod.PUT, value = "/update")
   @RequiredAuthority(authority = MemberAuthority.ADMIN)
-  public ResponseEntity<CommonResponse<?>> musicInfoPut(@RequestBody MusicInfo musicInfo)
+  public ResponseEntity<CommonResponse<?>> musicInfoPut(@RequestBody RequestMusicInfoUpdateDTO dto)
   {
-    musicInfoService.update(musicInfo);
+    musicInfoService.update(dto);
 
     return ResponseEntity.ok().body(
       CommonResponse.success()

@@ -1,4 +1,4 @@
-package com.ez2archive.controller;
+package com.ez2archive.controller.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

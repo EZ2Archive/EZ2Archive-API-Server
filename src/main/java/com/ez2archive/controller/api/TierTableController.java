@@ -1,5 +1,6 @@
-package com.ez2archive.controller;
+package com.ez2archive.controller.api;
 
+import com.ez2archive.common.aspect.RequiredAuthority;
 import com.ez2archive.common.aspect.RequiredToken;
 import com.ez2archive.common.auth.JwtToken;
 import com.ez2archive.common.auth.TokenProvider;
@@ -7,6 +8,7 @@ import com.ez2archive.common.response.CommonResponse;
 import com.ez2archive.dto.tier.RecordDetailDTO;
 import com.ez2archive.dto.tier.TierInfoDTO;
 import com.ez2archive.entity.KeyType;
+import com.ez2archive.entity.MemberAuthority;
 import com.ez2archive.service.TierTableService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -54,4 +56,17 @@ public class TierTableController
       CommonResponse.success(tierPointList)
     );
   }
+
+  @Operation(summary = "Required = [Token, authority.ADMIN] 사용자 모든 티어 갱신")
+  @RequestMapping(method = RequestMethod.PUT, value="/update")
+  @RequiredAuthority(authority = MemberAuthority.ADMIN)
+  public ResponseEntity<CommonResponse<?>> tierUpdatePut()
+  {
+    tierTableService.updateTiers();
+
+    return ResponseEntity.ok().body(
+      CommonResponse.success()
+    );
+  }
+
 }

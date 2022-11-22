@@ -1,4 +1,4 @@
-package com.ez2archive.controller;
+package com.ez2archive.controller.api;
 
 import com.ez2archive.common.auth.JwtToken;
 import com.ez2archive.common.response.CommonResponse;

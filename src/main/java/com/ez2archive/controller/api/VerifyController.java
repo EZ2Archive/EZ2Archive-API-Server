@@ -1,4 +1,4 @@
-package com.ez2archive.controller;
+package com.ez2archive.controller.api;
 
 import com.ez2archive.common.response.CommonResponse;
 import com.ez2archive.dto.auth.RequestPasswordModifyDTO;
@@ -21,7 +21,7 @@ public class VerifyController
    *   - 이메일 인증 URL 경로와 동일하지 않을 경우 예외 발생<br>
    *   - '@see'에 기술된 메소드 URL 참조
    * </p>
-   * @see com.ez2archive.controller.VerifyController#emailVerifyPatch(String)
+   * @see VerifyController#emailVerifyPatch(String)
    */
   @Operation(summary = "인증 이메일 발송 요청")
   @RequestMapping(method = RequestMethod.POST)
